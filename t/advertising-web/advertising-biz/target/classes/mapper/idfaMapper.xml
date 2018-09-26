@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IIdfaMapper">
+    <resultMap id="BaseResultMap" type="com.xtzn.mapper.entity.Idfa">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="IDFA_CODE" jdbcType="VARCHAR" property="idfaCode"/>
+        <result column="AFFILIATE_ACCOUNT" jdbcType="VARCHAR" property="affiliateAccount"/>
+        <result column="COUNTRY" jdbcType="VARCHAR" property="country"/>
+        <result column="THIRD_PARTY" jdbcType="VARCHAR" property="thirdParty"/>
+        <result column="BUNDLE_NAME" jdbcType="VARCHAR" property="bundleName"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+
+    <select id="selectAccessibleIdfaCount" resultType="java.lang.Integer">
+        select count(*) from idfa
+        <where>
+            <if test="taskName != null">
+                and id not in (select id from idfa where BUNDLE_NAME LIKE CONCAT("%",(SELECT BUNDLE_NAME from
+                task_configuration where CONFIGURATION_NAME = #{taskName,jdbcType=VARCHAR} and USER_ID =
+                #{userId,jdbcType=INTEGER}),"%"))
+            </if>
+            <if test="thirdParty!= null">
+                and FIND_IN_SET(#{thirdParty,jdbcType=VARCHAR},THIRD_PARTY)
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectAccessibleIdfaForLua" parameterType="com.xtzn.vo.LuaReuqest" resultType="java.util.Map">
+        select ID id,IDFA_CODE idfaCode,AFFILIATE_ACCOUNT affiliateAccount,COUNTRY country,THIRD_PARTY
+        thirdParty,BUNDLE_NAME bundleName from idfa
+        <where>
+            <if test="idfaCode != null and idfaCode != ''">
+                and IDFA_CODE = #{idfaCode,jdbcType=VARCHAR}
+            </if>
+            <if test="country != null">
+                and COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test="affiliateAccount != null and affiliateAccount != ''">
+                and AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="thirdParty != null">
+                and FIND_IN_SET(#{thirdParty,jdbcType=VARCHAR},THIRD_PARTY)
+            </if>
+            <if test="bundleName != null">
+                and BUNDLE_NAME NOT LIKE CONCAT("%",#{bundleName,jdbcType=VARCHAR},"%")
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            limit 1
+        </where>
+    </select>
+    <update id="updateIdfaByLua">
+        update idfa
+        <set>
+            <if test="originalBundleName != null">
+                BUNDLE_NAME = concat(BUNDLE_NAME,",",#{bundleName,jdbcType=VARCHAR})
+            </if>
+            <if test="originalBundleName == null">
+                BUNDLE_NAME = #{bundleName,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <insert id="insertIdfa">
+        insert into idfa (IDFA_CODE,THIRD_PARTY,USER_ID) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item,jdbcType=VARCHAR},#{thirdParty,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <insert id="insertIdfaByLua" parameterType="com.xtzn.vo.LuaReuqest">
+   insert into idfa (IDFA_CODE,AFFILIATE_ACCOUNT,COUNTRY,THIRD_PARTY,BUNDLE_NAME,USER_ID) values 
+   (#{idfaCode},#{affiliateAccount,jdbcType=VARCHAR},#{country,jdbcType=VARCHAR},#{thirdParty,jdbcType=VARCHAR},#{bundleName,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER})
+  </insert>
+</mapper>

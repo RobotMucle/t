@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.ITaskConfigurationMapper">
+    <resultMap id="baseResultMap" type="com.xtzn.mapper.entity.TaskConfiguration">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="CONFIGURATION_NAME" jdbcType="VARCHAR" property="configurationName"/>
+        <result column="SCRIPT_NAME" jdbcType="VARCHAR" property="scriptName"/>
+        <result column="BUNDLE_NAME" jdbcType="VARCHAR" property="bundleName"/>
+        <result column="APPLE_ACCOUNT_ID" jdbcType="INTEGER" property="appleAccountId"/>
+        <result column="THIRD_PARTY_NAME" jdbcType="VARCHAR" property="thirdPartyName"/>
+        <result column="ITUNES_ID" jdbcType="VARCHAR" property="itunesId"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID id, CONFIGURATION_NAME configurationName, SCRIPT_NAME scriptName, BUNDLE_NAME bundleName, APPLE_ACCOUNT_ID appleAccountId, 
+    THIRD_PARTY_NAME thirdPartyName, ITUNES_ID itunesId
+  </sql>
+    <sql id="sql_column">
+    a.ID id,a.CONFIGURATION_NAME configurationName,a.SCRIPT_NAME scriptName,a.BUNDLE_NAME bundleName,a.THIRD_PARTY_NAME thirdPartyName,
+    a.ITUNES_ID itunesId,b.USER_NAME userName,b.PASSWORD password
+  </sql>
+    <select id="selectTaskConfigurationByUser" resultType="java.util.Map">
+        select
+        <include refid="sql_column"/>
+        from task_configuration as a
+        left join apple_account as b on a.APPLE_ACCOUNT_ID = b.ID
+        where a.USER_ID = #{userId,jdbcType=INTEGER} order by ID DESC
+    </select>
+    <select id="selectTaskConfigurationByPage" resultType="java.util.Map">
+        select
+        <include refid="sql_column"/>,c.FRANCHISEE_NAME franchiseeName
+        from task_configuration as a
+        left join apple_account as b on a.APPLE_ACCOUNT_ID = b.ID
+        left join user as c on a.USER_ID = c.ID
+        order by franchiseeName DESC,ID DESC
+    </select>
+    <select id="selectCountByUser" resultType="java.lang.Integer">
+    select count(*) from task_configuration where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from task_configuration
+  </select>
+    <select id="selectConfigurationName" resultType="java.lang.String">
+    select CONFIGURATION_NAME configurationName from task_configuration where CONFIGURATION_NAME = #{configurationName,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAllTaskConfiguration" resultType="java.util.Map">
+        select
+        <include refid="sql_column"/>
+        from task_configuration as a
+        left join apple_account as b on a.APPLE_ACCOUNT_ID = b.ID
+        where USER_ID = #{userId,jdbcType=INTEGER} order by ID DESC
+    </select>
+    <select id="selectTaskConfigurationById" resultType="java.util.Map">
+        select
+        <include refid="sql_base"/>
+        from task_configuration where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectBundleNameByLua" resultType="java.lang.String">
+    select distinct a.BUNDLE_NAME bundleName from task_configuration as a
+    left join task_list as b on a.ID = b.TASK_CONFIGURATION_ID
+    where b.STATUS = 1 and b.USER_ID = #{userId,jdbcType=INTEGER} and a.BUNDLE_NAME != "" and a.BUNDLE_NAME is not null
+    union 
+    select distinct a.BUNDLE_NAME bundleName from task_configuration as a
+    left join task_list as b on a.ID = b.TASK_CONFIGURATION_ID
+    left join retained_list as c on b.ID = c.TASK_ID
+    where TO_DAYS(CURRENT_TIMESTAMP())-TO_DAYS(c.UPLOAD_TIME) &lt;= c.KEEP_DAYS and c.USER_ID = #{userId,jdbcType=INTEGER} and a.BUNDLE_NAME != "" and a.BUNDLE_NAME is not null
+  </select>
+    <select id="selectBundleNameForTask" resultType="java.lang.String">
+    select distinct BUNDLE_NAME bundleName from task_configuration where BUNDLE_NAME != "" and BUNDLE_NAME is not null and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectDifferBundleName" resultType="java.lang.String">
+    select distinct BUNDLE_NAME bundleName from task_configuration 
+    where BUNDLE_NAME not in 
+    (select distinct a.BUNDLE_NAME bundleName from task_configuration as a
+    left join task_list as b on a.ID = b.TASK_CONFIGURATION_ID
+    where b.STATUS = 1 and b.USER_ID = #{userId,jdbcType=INTEGER} 
+    union 
+    select distinct a.BUNDLE_NAME bundleName from task_configuration as a
+    left join task_list as b on a.ID = b.TASK_CONFIGURATION_ID
+    left join retained_list as c on b.ID = c.TASK_ID
+    where TO_DAYS(CURRENT_TIMESTAMP())-TO_DAYS(c.UPLOAD_TIME) &lt;= c.KEEP_DAYS and c.USER_ID = #{userId,jdbcType=INTEGER}) and BUNDLE_NAME != "" and BUNDLE_NAME is not null
+  </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from task_configuration
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from task_configuration
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insertTaskConfiguration" parameterType="com.xtzn.mapper.entity.TaskConfiguration">
+        insert into task_configuration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="configurationName != null">
+                CONFIGURATION_NAME,
+            </if>
+            <if test="scriptName != null">
+                SCRIPT_NAME,
+            </if>
+            <if test="bundleName != null">
+                BUNDLE_NAME,
+            </if>
+            <if test="appleAccountId != null">
+                APPLE_ACCOUNT_ID,
+            </if>
+            <if test="thirdPartyName != null">
+                THIRD_PARTY_NAME,
+            </if>
+            <if test="itunesId != null">
+                ITUNES_ID,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="configurationName != null">
+                #{configurationName,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptName != null">
+                #{scriptName,jdbcType=VARCHAR},
+            </if>
+            <if test="bundleName != null">
+                #{bundleName,jdbcType=VARCHAR},
+            </if>
+            <if test="appleAccountId != null">
+                #{appleAccountId,jdbcType=INTEGER},
+            </if>
+            <if test="thirdPartyName != null">
+                #{thirdPartyName,jdbcType=VARCHAR},
+            </if>
+            <if test="itunesId != null">
+                #{itunesId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateTaskConfiguration" parameterType="com.xtzn.mapper.entity.TaskConfiguration">
+        update task_configuration
+        <set>
+            <if test="configurationName != null">
+                CONFIGURATION_NAME = #{configurationName,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptName != null">
+                SCRIPT_NAME = #{scriptName,jdbcType=VARCHAR},
+            </if>
+            <if test="bundleName != null">
+                BUNDLE_NAME = #{bundleName,jdbcType=VARCHAR},
+            </if>
+            <if test="appleAccountId != null">
+                APPLE_ACCOUNT_ID = #{appleAccountId,jdbcType=INTEGER},
+            </if>
+            <if test="thirdPartyName != null">
+                THIRD_PARTY_NAME = #{thirdPartyName,jdbcType=VARCHAR},
+            </if>
+            <if test="itunesId != null">
+                ITUNES_ID = #{itunesId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

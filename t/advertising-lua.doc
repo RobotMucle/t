@@ -1,0 +1,2197 @@
+
+        <html xmlns:v="urn:schemas-microsoft-com:vml"
+        xmlns:o="urn:schemas-microsoft-com:office:office"
+        xmlns:w="urn:schemas-microsoft-com:office:word"
+        xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta http-equiv=Content-Type content="text/html;  
+        charset=utf-8">
+        <style type="text/css">
+            table  
+            {  
+                border-collapse: collapse;
+                border: none;  
+                width: 100%;  
+            }  
+            td  
+            {  
+                border: solid #CCC 1px;  
+            }  
+            .codestyle{
+                word-break: break-all;
+                background:silver;mso-highlight:silver;
+            }
+        </style>
+        <meta name=ProgId content=Word.Document>
+        <meta name=Generator content="Microsoft Word 11">
+        <meta name=Originator content="Microsoft Word 11">
+        <xml><w:WordDocument><w:View>Print</w:View></xml></head>
+        <body><h1>1、任务</h1><div style="margin-left:20px;"><h2>1.1、任务</h2><div style="margin-left:20px;"><h3>1.1.1、请求任务</h3><div style="margin-left:30px;"><p>欢迎使用Show</p>
+<p><strong>简要描述：</strong> </p>
+<ul>
+<li>请求任务接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/luaDubbo/distributeTask</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">byte</td>
+<td>任务类型：0:下载，2：注册  1:账号注册</td>
+</tr>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编号</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+    &quot;content&quot;:{
+    &quot;id&quot;:1,
+    &quot;taskName&quot;:&quot;sdsa&quot;,
+    &quot;country&quot;:&quot;UK&quot;,
+    &quot;affiliateAccount&quot;:&quot;ak2&quot;,
+    &quot;landingPageLink&quot;:&quot;http://www.zhimengzhe.com/bianchengjiaocheng/qitabiancheng/42770.html&quot;,
+    &quot;currentTime&quot;:&quot;20180425&quot;,
+    &quot;subId&quot;:&quot;9cd5eb4d&quot;,
+    &quot;playTimeMin&quot;:5,
+    &quot;playTimeMax&quot;:15,
+    &quot;specialTimeMin&quot;:10,
+    &quot;specialTimeMax&quot;:&quot;30,
+    &quot;specialPercent&quot;:50,
+    &quot;linkWaitTime&quot;:20,
+    appWaitTime:20,
+    &quot;retainedPercent&quot;:&quot;1,1,1,1,11,1,1,1,&quot;,
+    &quot;retainKeepDays&quot;:7,
+    isChangeIdfa:1,
+    &quot;ruleAddress&quot;:{
+    &quot;task1&quot;:&quot;wwww.shjs/task&quot;,
+    },
+    &quot;scriptName&quot;:&quot;脚本名称&quot;,
+    &quot;bundleName&quot;:&quot;包名&quot;,
+    &quot;userName&quot;:&quot;苹果账号&quot;,
+    &quot;password&quot;:&quot;账号密码&quot;,
+    &quot;thirdPartyName&quot;:&quot;四谛法&quot;,
+    &quot;type&quot;:0,
+    &quot;downloadType&quot;:1,
+    &quot;newPhonePercent&quot;:&quot;15`20&quot;,
+    &quot;generateRetainedType&quot;:&quot;0&quot;,
+    &quot;taskModel&quot;:1,
+    &quot;todayLevelMin&quot;:5,
+    &quot;todayLevelMax&quot;:10,
+    &quot;todayLevelPercent&quot;:0.25,
+    &quot;everydayLevelMin&quot;:2,
+    &quot;everydayLevelMax&quot;:5,
+    &quot;everydayLevelPercent&quot;:0.3,
+    }
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>任务ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">taskName</td>
+<td style="text-align: left;">string</td>
+<td>任务名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">country</td>
+<td style="text-align: left;">string</td>
+<td>国家</td>
+</tr>
+<tr>
+<td style="text-align: left;">affiliateAccount</td>
+<td style="text-align: left;">string</td>
+<td>联盟</td>
+</tr>
+<tr>
+<td style="text-align: left;">landingPageLink</td>
+<td style="text-align: left;">string</td>
+<td>任务链接</td>
+</tr>
+<tr>
+<td style="text-align: left;">currentTime</td>
+<td style="text-align: left;">string</td>
+<td>当前日期</td>
+</tr>
+<tr>
+<td style="text-align: left;">subId</td>
+<td style="text-align: left;">string</td>
+<td>subId</td>
+</tr>
+<tr>
+<td style="text-align: left;">playTimeMin</td>
+<td style="text-align: left;">Integer</td>
+<td>试玩最小时间秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">playTimeMax</td>
+<td style="text-align: left;">Integer</td>
+<td>试玩最大时间秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">specialTimeMin</td>
+<td style="text-align: left;">Integer</td>
+<td>特殊任务长时间试玩最小时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">specialTimeMax</td>
+<td style="text-align: left;">Integer</td>
+<td>特殊任务长时间试玩最大时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">specialPercent</td>
+<td style="text-align: left;">Integer</td>
+<td>特殊任务长时间试玩百分比</td>
+</tr>
+<tr>
+<td style="text-align: left;">linkWaitTime</td>
+<td style="text-align: left;">Integer</td>
+<td>链接等待时间秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">appWaitTime</td>
+<td style="text-align: left;">Integer</td>
+<td>app等待时间秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainedPercent</td>
+<td style="text-align: left;">string</td>
+<td>留存百分比</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainKeepDays</td>
+<td style="text-align: left;">Integer</td>
+<td>留存保留天数</td>
+</tr>
+<tr>
+<td style="text-align: left;">isChangeIdfa</td>
+<td style="text-align: left;">byte</td>
+<td>是否改变IDFA:1是0否</td>
+</tr>
+<tr>
+<td style="text-align: left;">ruleAddress</td>
+<td style="text-align: left;">list</td>
+<td>规则地址list</td>
+</tr>
+<tr>
+<td style="text-align: left;">scriptName</td>
+<td style="text-align: left;">string</td>
+<td>脚本名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">bundleName</td>
+<td style="text-align: left;">string</td>
+<td>包名</td>
+</tr>
+<tr>
+<td style="text-align: left;">userName</td>
+<td style="text-align: left;">string</td>
+<td>苹果账号</td>
+</tr>
+<tr>
+<td style="text-align: left;">password</td>
+<td style="text-align: left;">string</td>
+<td>苹果账号密码</td>
+</tr>
+<tr>
+<td style="text-align: left;">thirdPartyName</td>
+<td style="text-align: left;">string</td>
+<td>第三方名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">byte</td>
+<td>任务类型：0:下载，2：注册  1:账号注册</td>
+</tr>
+<tr>
+<td style="text-align: left;">downloadType</td>
+<td style="text-align: left;">byte</td>
+<td>下载任务类型 ：正常任务为:0 测试任务为:1</td>
+</tr>
+<tr>
+<td style="text-align: left;">newPhonePercent</td>
+<td style="text-align: left;">string</td>
+<td>新几率</td>
+</tr>
+<tr>
+<td style="text-align: left;">generateRetainedType</td>
+<td style="text-align: left;">byte</td>
+<td>生成留存类型：0:正常;1:长时间;2:关卡</td>
+</tr>
+<tr>
+<td style="text-align: left;">taskModel</td>
+<td style="text-align: left;">byte</td>
+<td>任务模式:0:普通模式;1:抢量模式</td>
+</tr>
+<tr>
+<td style="text-align: left;">todayLevelMin</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡任务今日次数设置的最小值</td>
+</tr>
+<tr>
+<td style="text-align: left;">todayLevelMax</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡任务今日次数设置的最大值</td>
+</tr>
+<tr>
+<td style="text-align: left;">todayLevelPercent</td>
+<td style="text-align: left;">double</td>
+<td>关卡任务今日次数百分比</td>
+</tr>
+<tr>
+<td style="text-align: left;">everydayLevelMin</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡任务每日留存次数最小值</td>
+</tr>
+<tr>
+<td style="text-align: left;">everydayLevelMax</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡任务每日留存次数最大值</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！</p></div><h3>1.1.2、跑点击</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>跑点击接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/api/runClick</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">taskId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>任务ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div><h3>1.1.3、完成任务</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>完成任务接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/finishTask</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">affiliateAccount</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>联盟</td>
+</tr>
+<tr>
+<td style="text-align: left;">uploadPath</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>包路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">keepDays</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>留存保留天数</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainedPercent</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>留存方案</td>
+</tr>
+<tr>
+<td style="text-align: left;">taskId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>任务ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">subId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>subId</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipAddress</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>ip地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">isNewPhone</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>是否是新机：0:否;1;是</td>
+</tr>
+<tr>
+<td style="text-align: left;">longTimeSign</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>长时间标识：0:正常时间;1:长时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">levelType</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">Byte</td>
+<td>关卡类型 ：0:留存保留日期内每日都跑1:次日需要跑2:跑1-5次</td>
+</tr>
+<tr>
+<td style="text-align: left;">levelCount</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡数量</td>
+</tr>
+<tr>
+<td style="text-align: left;">accountUser</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>账户名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">accountPwd</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>账户密码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div><h3>1.1.4、报告任务</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>报告任务接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/taskReport</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">taskId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>任务ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>报告类型：0:变身1：完成任务2app需要更新,3:(针对注册任务)账号用完:</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div></div><h2>1.2、留存</h2><div style="margin-left:20px;"><h3>1.2.1、请求留存</h3><div style="margin-left:30px;"><p>欢迎使用Show</p>
+<p><strong>简要描述：</strong> </p>
+<ul>
+<li>请求留存接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/luaDubbo/distributeRetained</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">uploadType</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>0:.zip  1:.tar.gz</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+    &quot;content&quot;:{
+
+    }
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>留存ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">taskId</td>
+<td style="text-align: left;">Integer</td>
+<td>任务ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">configurationName</td>
+<td style="text-align: left;">string</td>
+<td>任务名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">country</td>
+<td style="text-align: left;">string</td>
+<td>国家</td>
+</tr>
+<tr>
+<td style="text-align: left;">affiliateAccount</td>
+<td style="text-align: left;">string</td>
+<td>联盟</td>
+</tr>
+<tr>
+<td style="text-align: left;">uploadPath</td>
+<td style="text-align: left;">string</td>
+<td>包路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">uploadTime</td>
+<td style="text-align: left;">timestamp</td>
+<td>上传日期</td>
+</tr>
+<tr>
+<td style="text-align: left;">currentTime</td>
+<td style="text-align: left;">string</td>
+<td>当前日期</td>
+</tr>
+<tr>
+<td style="text-align: left;">longTimeSign</td>
+<td style="text-align: left;">Byte</td>
+<td>长时间留存标识:长时间留存标识：0:正常时间;1:长时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">levelType</td>
+<td style="text-align: left;">Byte</td>
+<td>关卡留存标识:0:留存保留日期内每日都跑1:次日需要跑2:跑1-5次</td>
+</tr>
+<tr>
+<td style="text-align: left;">playTimeMin</td>
+<td style="text-align: left;">Integer</td>
+<td>试玩最小时间秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">playTimeMax</td>
+<td style="text-align: left;">Integer</td>
+<td>试玩最大时间秒</td>
+</tr>
+<tr>
+<td style="text-align: left;">keepDays</td>
+<td style="text-align: left;">Integer</td>
+<td>留存保留天数</td>
+</tr>
+<tr>
+<td style="text-align: left;">ruleAddress</td>
+<td style="text-align: left;">list</td>
+<td>规则地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">scriptName</td>
+<td style="text-align: left;">string</td>
+<td>脚本名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">bundleName</td>
+<td style="text-align: left;">string</td>
+<td>包名</td>
+</tr>
+<tr>
+<td style="text-align: left;">userName</td>
+<td style="text-align: left;">string</td>
+<td>苹果账号</td>
+</tr>
+<tr>
+<td style="text-align: left;">password</td>
+<td style="text-align: left;">string</td>
+<td>苹果账号密码</td>
+</tr>
+<tr>
+<td style="text-align: left;">thirdPartyName</td>
+<td style="text-align: left;">string</td>
+<td>第三方名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">distributeType</td>
+<td style="text-align: left;">byte</td>
+<td>留存一次还是多次：0一次1多次</td>
+</tr>
+<tr>
+<td style="text-align: left;">morrowdayLevelMin</td>
+<td style="text-align: left;">Integer</td>
+<td>次日任务每日留存次数最小值</td>
+</tr>
+<tr>
+<td style="text-align: left;">morrowdayLevelMax</td>
+<td style="text-align: left;">Integer</td>
+<td>次日任务每日留存次数最大值</td>
+</tr>
+<tr>
+<td style="text-align: left;">everydayLevelMin</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡任务每日留存次数最小值</td>
+</tr>
+<tr>
+<td style="text-align: left;">everydayLevelMax</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡任务每日留存次数最大值</td>
+</tr>
+<tr>
+<td style="text-align: left;">generateRetainedType</td>
+<td style="text-align: left;">byte</td>
+<td>生成留存类型：0:正常;1:长时间;2:关卡</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！</p></div><h3>1.2.2、留存跑完</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>留存跑完接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/finishRetained</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">reqTime</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>留存上传时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainedKeepDays</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>留存保留天数</td>
+</tr>
+<tr>
+<td style="text-align: left;">isSuccess</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>是否成功 ：0:否;1;是2:包路径损坏</td>
+</tr>
+<tr>
+<td style="text-align: left;">reason</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>原因</td>
+</tr>
+<tr>
+<td style="text-align: left;">taskId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>任务ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipAddress</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>IP地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainedId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>留存ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">distributeType</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>留存登陆标识 ：0:一次;1多次</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>是否需要更新包路径 ：0:否;1是</td>
+</tr>
+<tr>
+<td style="text-align: left;">uploadPath</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>包路径</td>
+</tr>
+<tr>
+<td style="text-align: left;">count</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>关卡数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div><h3>1.2.3、包路径损坏更换</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>包路径损坏更换接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/uploadPathReplace</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>留存id</td>
+</tr>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">reqTime</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>上传时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">taskId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>任务id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">uploadPath</td>
+<td style="text-align: left;">string</td>
+<td>包路径</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div></div></div><h1>2、其他支持管理</h1><div style="margin-left:20px;"><h2>2.1、IDFA</h2><div style="margin-left:20px;"><h3>2.1.1、添加IDFA</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>添加IDFA接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/createIdfa</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">idfaCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>IDFA</td>
+</tr>
+<tr>
+<td style="text-align: left;">affiliateAccount</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>联盟</td>
+</tr>
+<tr>
+<td style="text-align: left;">country</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>第国家</td>
+</tr>
+<tr>
+<td style="text-align: left;">thirdParty</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>第三方名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">bundleName</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>包名</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div><h3>2.1.2、查询可使用的IDFA</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>查询可使用的IDFA接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestIdfa</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">affiliateAccount</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>联盟</td>
+</tr>
+<tr>
+<td style="text-align: left;">country</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>第国家</td>
+</tr>
+<tr>
+<td style="text-align: left;">thirdParty</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>第三方名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">bundleName</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>包名</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">idfaCode</td>
+<td style="text-align: left;">string</td>
+<td>IDFA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div></div><h2>2.2、资料</h2><div style="margin-left:20px;"><h3>2.2.1、请求资料</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>请求资料接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestPersonInfo</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">typeName</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>资料类型</td>
+</tr>
+<tr>
+<td style="text-align: left;">fileName</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>文件名</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">Byte</td>
+<td>0:根据资料类型1根据文件名</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>任务配置ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">firstName</td>
+<td style="text-align: left;">string</td>
+<td>名</td>
+</tr>
+<tr>
+<td style="text-align: left;">lastName</td>
+<td style="text-align: left;">string</td>
+<td>姓</td>
+</tr>
+<tr>
+<td style="text-align: left;">email</td>
+<td style="text-align: left;">string</td>
+<td>邮箱</td>
+</tr>
+<tr>
+<td style="text-align: left;">password</td>
+<td style="text-align: left;">string</td>
+<td>密码</td>
+</tr>
+<tr>
+<td style="text-align: left;">year</td>
+<td style="text-align: left;">Integer</td>
+<td>年</td>
+</tr>
+<tr>
+<td style="text-align: left;">month</td>
+<td style="text-align: left;">Integer</td>
+<td>月</td>
+</tr>
+<tr>
+<td style="text-align: left;">day</td>
+<td style="text-align: left;">Integer</td>
+<td>日</td>
+</tr>
+<tr>
+<td style="text-align: left;">region</td>
+<td style="text-align: left;">string</td>
+<td>区</td>
+</tr>
+<tr>
+<td style="text-align: left;">city</td>
+<td style="text-align: left;">string</td>
+<td>市</td>
+</tr>
+<tr>
+<td style="text-align: left;">street</td>
+<td style="text-align: left;">string</td>
+<td>街道</td>
+</tr>
+<tr>
+<td style="text-align: left;">sex</td>
+<td style="text-align: left;">string</td>
+<td>性</td>
+</tr>
+<tr>
+<td style="text-align: left;">zipCode</td>
+<td style="text-align: left;">string</td>
+<td>邮编</td>
+</tr>
+<tr>
+<td style="text-align: left;">telephone</td>
+<td style="text-align: left;">string</td>
+<td>电话</td>
+</tr>
+<tr>
+<td style="text-align: left;">usedCnt</td>
+<td style="text-align: left;">Integer</td>
+<td>使用次数</td>
+</tr>
+<tr>
+<td style="text-align: left;">createTime</td>
+<td style="text-align: left;">date</td>
+<td>添加时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">usedTime</td>
+<td style="text-align: left;">date</td>
+<td>使用时间</td>
+</tr>
+<tr>
+<td style="text-align: left;">isSuccess</td>
+<td style="text-align: left;">byte</td>
+<td>是否成功：0否1是</td>
+</tr>
+<tr>
+<td style="text-align: left;">securityCode</td>
+<td style="text-align: left;">string</td>
+<td>身份验证</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipAddress</td>
+<td style="text-align: left;">string</td>
+<td>ip地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipRegion</td>
+<td style="text-align: left;">string</td>
+<td>ip区</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipCity</td>
+<td style="text-align: left;">string</td>
+<td>ip市</td>
+</tr>
+<tr>
+<td style="text-align: left;">accountBalance</td>
+<td style="text-align: left;">BigDecimal</td>
+<td>余额</td>
+</tr>
+<tr>
+<td style="text-align: left;">fileName</td>
+<td style="text-align: left;">string</td>
+<td>文件名</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">byte</td>
+<td>状态：0未使用1已使用</td>
+</tr>
+<tr>
+<td style="text-align: left;">activeLink</td>
+<td style="text-align: left;">string</td>
+<td>激活链接</td>
+</tr>
+<tr>
+<td style="text-align: left;">typeId</td>
+<td style="text-align: left;">Integer</td>
+<td>资料类型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！</p></div><h3>2.2.2、添加资料信息、资料备份记录</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>添加资料信息、资料备份记录接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/updatePersonInfo</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">是</td>
+<td>任务配置ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">isSuccess</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">byte</td>
+<td>是否成功：0否1是</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipAddress</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>ip地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipRegion</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>ip区</td>
+</tr>
+<tr>
+<td style="text-align: left;">ipCity</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>ip市</td>
+</tr>
+<tr>
+<td style="text-align: left;">accountBalance</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">BigDecimal</td>
+<td>余额</td>
+</tr>
+<tr>
+<td style="text-align: left;">fileName</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">string</td>
+<td>文件名</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！</p></div></div><h2>2.3、端口</h2><div style="margin-left:20px;"><h3>2.3.1、请求端口</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>请求端口接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestPort</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编号</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+    &quot;content&quot;:{
+    &quot;serverAddress:&quot;243.56.78.56&quot;,
+    &quot;serverPort&quot;:&quot;22299&quot;,
+    &quot;serverAddress&quot;:22299&quot;&quot;,
+    &quot;serverAddres&quot;s:&quot;22299&quot;,
+    &quot;serverAddress&quot;:&quot;22299&quot;,
+    &quot;serverAddress&quot;:&quot;22299&quot;,
+    }
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">serverAddress</td>
+<td style="text-align: left;">Integer</td>
+<td>服务器地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">serverPort</td>
+<td style="text-align: left;">string</td>
+<td>服务器端口</td>
+</tr>
+<tr>
+<td style="text-align: left;">httpPort</td>
+<td style="text-align: left;">string</td>
+<td>http端口</td>
+</tr>
+<tr>
+<td style="text-align: left;">port</td>
+<td style="text-align: left;">string</td>
+<td>端口</td>
+</tr>
+<tr>
+<td style="text-align: left;">groupName</td>
+<td style="text-align: left;">string</td>
+<td>分组账号</td>
+</tr>
+<tr>
+<td style="text-align: left;">groupPassword</td>
+<td style="text-align: left;">string</td>
+<td>分组密码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div></div><h2>2.4、账号</h2><div style="margin-left:20px;"><h3>2.4.1、请求账号</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>请求账号接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestAccount</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">typeName</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>账号类型</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>账号使用状态：0未用1已使用2都可以</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+    &quot;content&quot;:{
+    &quot;id&quot;:1,
+    &quot;userName&quot;:&quot;zhangsan&quot;,
+    &quot;userPwd&quot;：&quot;123456&quot;
+    }
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">userName</td>
+<td style="text-align: left;">string</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td style="text-align: left;">userPwd</td>
+<td style="text-align: left;">string</td>
+<td>密码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div><h3>2.4.2、添加账号</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>添加账号接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/createAccount</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">typeName</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>账号类型</td>
+</tr>
+<tr>
+<td style="text-align: left;">userName</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td style="text-align: left;">userPwd</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>密码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;，
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div></div><h2>2.5、包名</h2><div style="margin-left:20px;"><h3>2.5.1、查看包名</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>查看包名接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestBundleName</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Byte</td>
+<td>0：获取留存和任务包名，1：获取任务配置中的所有包名2:相差的包</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+    &quot;content&quot;:{
+    &quot;asa&quot;,&quot;fgfd&quot;,&quot;weqawrq&quot;
+    }
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述
+欢迎使用ShowDoc！</li>
+</ul></div></div><h2>2.6、igg</h2><div style="margin-left:20px;"><h3>2.6.1、获取igg编码</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>获取igg编码接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestIggCode</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+    &quot;content&quot;:{
+    &quot;asa&quot;,&quot;fgfd&quot;,&quot;weqawrq&quot;
+    }
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">iggCode</td>
+<td style="text-align: left;">string</td>
+<td>igg编码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述
+欢迎使用ShowDoc！</li>
+</ul></div><h3>2.6.2、igg充值报告</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>igg充值报告接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/iggRechargeReport</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneCode</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>手机编码</td>
+</tr>
+<tr>
+<td style="text-align: left;">iggId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>igg主键ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">isSuccess</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">byte</td>
+<td>0:充值成功1  失败，已使用2其他</td>
+</tr>
+<tr>
+<td style="text-align: left;">outOfDate</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>到期时间</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;,
+
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述
+欢迎使用ShowDoc！</li>
+</ul></div></div><h2>2.7、苹果账号</h2><div style="margin-left:20px;"><h3>2.7.1、请求苹果账号</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<p>-请求苹果账号接口</p>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestAppleAccount</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">country</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>国家</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;SUCCESS&quot;,
+    &quot;data&quot;:{
+    &quot;id&quot;:1,
+    &quot;userName&quot;:&quot;appleaccc&quot;,
+    &quot;password&quot;:&quot;123456&quot;,
+    &quot;country&quot;:&quot;US&quot;,
+    &quot;timezone&quot;:&quot;America/New_York&quot;,
+    &quot;status&quot;:1
+    }
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>id</td>
+</tr>
+<tr>
+<td style="text-align: left;">userName</td>
+<td style="text-align: left;">string</td>
+<td>账号</td>
+</tr>
+<tr>
+<td style="text-align: left;">password</td>
+<td style="text-align: left;">string</td>
+<td>密码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul>
+<p>欢迎使用ShowDoc！欢迎使用ShowDoc！欢迎使用ShowDoc！</p></div><h3>2.7.2、苹果账号报告</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>苹果账号报告接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/appleAccountReport</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;成功&quot;
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述
+欢迎使用ShowDoc！</li>
+</ul></div></div><h2>2.8、手机配置</h2><div style="margin-left:20px;"><h3>2.8.1、请求手机配置方案</h3><div style="margin-left:30px;"><p><strong>简要描述：</strong> </p>
+<ul>
+<li>请求手机配置方案接口</li>
+</ul>
+<p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://xx.com/advertising-web/lua/requestPhoneProgram</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">userId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">Integer</td>
+<td>用户标识</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>  {
+    &quot;code&quot;: &quot;0000&quot;,
+    &quot;desc&quot;:&quot;SUCCESS&quot;,
+    &quot;content&quot;:{
+    &quot;id&quot;:1,
+    &quot;name&quot;:&quot;nanjingtechnology&quot;,
+    &quot;downloadMinNumber&quot;:1,
+    &quot;downloadMaxNumber&quot;:3,
+    &quot;retainedMinNumber&quot;:1
+    &quot;retainedMaxNumber&quot;:3
+    &quot;registerMinNumber&quot;:1
+    &quot;registerMaxNumber&quot;:3
+    &quot;accountMinNumber&quot;:1
+    &quot;accountMaxNumber&quot;:3
+    &quot;testMinNumber&quot;:1
+    &quot;testMaxNumber&quot;:3
+    &quot;address&quot;:&quot;wsw.23.we.23&quot;
+    }
+  }</code></pre></table>
+<p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">Integer</td>
+<td>id</td>
+</tr>
+<tr>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">string</td>
+<td>方案名称</td>
+</tr>
+<tr>
+<td style="text-align: left;">downloadMinNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>下载任务手机最小编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">downloadMaxNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>下载任务手机最大编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainedMinNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>留存任务手机最小编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">retainedMaxNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>留存任务手机最大编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">registerMinNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>注册任务手机最小编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">registerMaxNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>注册任务手机最大编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">accountMinNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>账号注册任务手机最小编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">accountMaxNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>账号注册任务手机最大编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">testMinNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>测试任务手机最小编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">testMaxNumber</td>
+<td style="text-align: left;">Integer</td>
+<td>测试任务手机最大编号</td>
+</tr>
+<tr>
+<td style="text-align: left;">address</td>
+<td style="text-align: left;">string</td>
+<td>地址</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注</strong> </p>
+<ul>
+<li>更多返回错误代码请看首页的错误代码描述</li>
+</ul></div></div></div><h1>3、错误码</h1><div style="margin-left:20px;"><h2>3.1、错误码</h2><div style="margin-left:20px;"><p><strong>返回参数说明</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">错误码</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">0000</td>
+<td style="text-align: left;">成功</td>
+</tr>
+<tr>
+<td style="text-align: left;">0001</td>
+<td style="text-align: left;">成功</td>
+</tr>
+<tr>
+<td style="text-align: left;">9999</td>
+<td style="text-align: left;">系统异常</td>
+</tr>
+<tr>
+<td style="text-align: left;">9998</td>
+<td style="text-align: left;">失败</td>
+</tr>
+<tr>
+<td style="text-align: left;">9997</td>
+<td style="text-align: left;">网络通信异常</td>
+</tr>
+<tr>
+<td style="text-align: left;">9996</td>
+<td style="text-align: left;">可接受任务为空</td>
+</tr>
+<tr>
+<td style="text-align: left;">9995</td>
+<td style="text-align: left;">没有符合要求的数据</td>
+</tr>
+<tr>
+<td style="text-align: left;">9994</td>
+<td style="text-align: left;">可接受留存任务为空</td>
+</tr>
+<tr>
+<td style="text-align: left;">9993</td>
+<td style="text-align: left;">查询数据为空</td>
+</tr>
+<tr>
+<td style="text-align: left;">9992</td>
+<td style="text-align: left;">数据异常,接收数据为空</td>
+</tr>
+<tr>
+<td style="text-align: left;">9991</td>
+<td style="text-align: left;">任务过期</td>
+</tr>
+<tr>
+<td style="text-align: left;">9990</td>
+<td style="text-align: left;">留存过期</td>
+</tr>
+<tr>
+<td style="text-align: left;">9989</td>
+<td style="text-align: left;">端口用尽</td>
+</tr>
+<tr>
+<td style="text-align: left;">9988</td>
+<td style="text-align: left;">IDFA没有符合条件的</td>
+</tr>
+<tr>
+<td style="text-align: left;">9987</td>
+<td style="text-align: left;">IDFA重复添加</td>
+</tr>
+<tr>
+<td style="text-align: left;">9986</td>
+<td style="text-align: left;">账号没有符合条件的</td>
+</tr>
+<tr>
+<td style="text-align: left;">9985</td>
+<td style="text-align: left;">账号重复添加</td>
+</tr>
+<tr>
+<td style="text-align: left;">9984</td>
+<td style="text-align: left;">资料没有符合条件的</td>
+</tr>
+<tr>
+<td style="text-align: left;">9983</td>
+<td style="text-align: left;">资料IGG用完</td>
+</tr>
+<tr>
+<td style="text-align: left;">9982</td>
+<td style="text-align: left;">苹果账号没有可用的</td>
+</tr>
+<tr>
+<td style="text-align: left;">9981</td>
+<td style="text-align: left;">包路径没有可用的</td>
+</tr>
+<tr>
+<td style="text-align: left;">1001</td>
+<td style="text-align: left;">任务状态不正常</td>
+</tr>
+<tr>
+<td style="text-align: left;">1002</td>
+<td style="text-align: left;">任务不需要跑点击</td>
+</tr>
+<tr>
+<td style="text-align: left;">1003</td>
+<td style="text-align: left;">代理错误</td>
+</tr>
+<tr>
+<td style="text-align: left;">1004</td>
+<td style="text-align: left;">无重置任务</td>
+</tr>
+</tbody>
+</table></div></div></body></html>

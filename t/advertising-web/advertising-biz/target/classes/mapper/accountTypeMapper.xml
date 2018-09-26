@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IAccountTypeMapper">
+
+    <select id="selectAccountTypeByPageIndex" resultType="com.xtzn.mapper.entity.AccountType">
+    select ID id,TYPE_NAME typeName from account_type where USER_ID = #{userId,jdbcType=INTEGER} limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+    <select id="selectAllAccountTypeByPageIndex" resultType="com.xtzn.mapper.entity.AccountType">
+    select ID id,TYPE_NAME typeName from account_type where limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+    <select id="selectAccountTypeById" resultType="com.xtzn.mapper.entity.AccountType">
+    select ID id, TYPE_NAME typeName from account_type where ID = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from account_type  where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAllAccountType" resultType="com.xtzn.mapper.entity.AccountType">
+    select ID id, TYPE_NAME typeName from account_type where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+
+    <insert id="insertAccountType" parameterType="com.xtzn.mapper.entity.AccountType">
+    insert into account_type(ID,TYPE_NAME,USER_ID) values(null,#{typeName,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER})
+  </insert>
+    <update id="updateAccountTypeName" parameterType="com.xtzn.mapper.entity.AccountType">
+    update account_type set TYPE_NAME = #{typeName,jdbcType=VARCHAR} where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from account_type
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from account_type
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IIphoneProgramMapper">
+    <resultMap id="baseResultMap" type="com.xtzn.mapper.entity.IphoneProgram">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="DOWNLOAD_MIN_NUMBER" jdbcType="INTEGER" property="downloadMinNumber"/>
+        <result column="DOWNLOAD_MAX_NUMBER" jdbcType="INTEGER" property="downloadMaxNumber"/>
+        <result column="RETAINED_MIN_NUMBER" jdbcType="INTEGER" property="retainedMinNumber"/>
+        <result column="RETAINED_MAX_NUMBER" jdbcType="INTEGER" property="retainedMaxNumber"/>
+        <result column="REGISTER_MIN_NUMBER" jdbcType="INTEGER" property="registerMinNumber"/>
+        <result column="REGISTER_MAX_NUMBER" jdbcType="INTEGER" property="registerMaxNumber"/>
+        <result column="ACCOUNT_MIN_NUMBER" jdbcType="INTEGER" property="accountMinNumber"/>
+        <result column="ACCOUNT_MAX_NUMBER" jdbcType="INTEGER" property="accountMaxNumber"/>
+        <result column="TEST_MIN_NUMBER" jdbcType="INTEGER" property="testMinNumber"/>
+        <result column="TEST_MAX_NUMBER" jdbcType="INTEGER" property="testMaxNumber"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="sql_column">
+    ID as id, 
+    NAME as name, 
+    CONCAT(DOWNLOAD_MIN_NUMBER,"-", DOWNLOAD_MAX_NUMBER) as download, 
+    CONCAT(RETAINED_MIN_NUMBER,"-", RETAINED_MAX_NUMBER) as retained, 
+    CONCAT(REGISTER_MIN_NUMBER,"-", REGISTER_MAX_NUMBER) as register, 
+    CONCAT(ACCOUNT_MIN_NUMBER,"-", ACCOUNT_MAX_NUMBER) as account, 
+    CONCAT(TEST_MIN_NUMBER,"-", TEST_MAX_NUMBER) as test,
+    STATUS as status
+  </sql>
+    <sql id="sql_base">
+    NAME name, DOWNLOAD_MIN_NUMBER downloadMinNumber, DOWNLOAD_MAX_NUMBER downloadMaxNumber, 
+    RETAINED_MIN_NUMBER retainedMinNumber, RETAINED_MAX_NUMBER retainedMaxNumber, 
+    REGISTER_MIN_NUMBER registerMinNumber, REGISTER_MAX_NUMBER registerMaxNumber, 
+    ACCOUNT_MIN_NUMBER accountMinNumber, ACCOUNT_MAX_NUMBER accountMaxNumber, 
+    TEST_MIN_NUMBER testMinNumber, TEST_MAX_NUMBER testMaxNumber
+  </sql>
+    <select id="selectIphoneProgramByPageIndex" resultType="java.util.Map">
+        select
+        <include refid="sql_column"/>
+        from iphone_program where USER_ID = #{userId,jdbcType=INTEGER} limit
+        #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from iphone_program  where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectIphoneProgramById" parameterType="java.lang.Integer" resultMap="baseResultMap">
+        select
+        <include refid="sql_base"/>
+        from iphone_program
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectIphoneProgramForLua" resultType="java.util.Map">
+        select
+        <include refid="sql_base"/>
+        from iphone_program
+        where STATUS = 1 and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from iphone_program
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from iphone_program
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insertIphoneProgram" parameterType="com.xtzn.mapper.entity.IphoneProgram">
+    insert into iphone_program (NAME, DOWNLOAD_MIN_NUMBER, 
+      DOWNLOAD_MAX_NUMBER, RETAINED_MIN_NUMBER, RETAINED_MAX_NUMBER, 
+      REGISTER_MIN_NUMBER, REGISTER_MAX_NUMBER, ACCOUNT_MIN_NUMBER, 
+      ACCOUNT_MAX_NUMBER, TEST_MIN_NUMBER, TEST_MAX_NUMBER, 
+      STATUS,USER_ID)
+    values (#{name,jdbcType=VARCHAR}, #{downloadMinNumber,jdbcType=INTEGER}, 
+      #{downloadMaxNumber,jdbcType=INTEGER}, #{retainedMinNumber,jdbcType=INTEGER}, #{retainedMaxNumber,jdbcType=INTEGER}, 
+      #{registerMinNumber,jdbcType=INTEGER}, #{registerMaxNumber,jdbcType=INTEGER}, #{accountMinNumber,jdbcType=INTEGER}, 
+      #{accountMaxNumber,jdbcType=INTEGER}, #{testMinNumber,jdbcType=INTEGER}, #{testMaxNumber,jdbcType=INTEGER}, 
+      0,#{userId,jdbcType=INTEGER})
+  </insert>
+    <update id="updateIphoneProgramStatus">
+    update iphone_program set STATUS = (case when ID = #{id,jdbcType=INTEGER} then 1 else 0 end) where USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+    <update id="updateIphoneProgramContent" parameterType="com.xtzn.mapper.entity.IphoneProgram">
+        update iphone_program
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="downloadMinNumber != null">
+                DOWNLOAD_MIN_NUMBER = #{downloadMinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="downloadMaxNumber != null">
+                DOWNLOAD_MAX_NUMBER = #{downloadMaxNumber,jdbcType=INTEGER},
+            </if>
+            <if test="retainedMinNumber != null">
+                RETAINED_MIN_NUMBER = #{retainedMinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="retainedMaxNumber != null">
+                RETAINED_MAX_NUMBER = #{retainedMaxNumber,jdbcType=INTEGER},
+            </if>
+            <if test="registerMinNumber != null">
+                REGISTER_MIN_NUMBER = #{registerMinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="registerMaxNumber != null">
+                REGISTER_MAX_NUMBER = #{registerMaxNumber,jdbcType=INTEGER},
+            </if>
+            <if test="accountMinNumber != null">
+                ACCOUNT_MIN_NUMBER = #{accountMinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="accountMaxNumber != null">
+                ACCOUNT_MAX_NUMBER = #{accountMaxNumber,jdbcType=INTEGER},
+            </if>
+            <if test="testMinNumber != null">
+                TEST_MIN_NUMBER = #{testMinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="testMaxNumber != null">
+                TEST_MAX_NUMBER = #{testMaxNumber,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

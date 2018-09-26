@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.core.mapper.IRetainedListenningMapper">
+
+
+    <insert id="insertRetainedListenning">
+    insert into retained_listenning(ID,RETAINED_ID,RESULT_STATUS,LISTENNING_STATUS) values(null,#{retainedId,jdbcType=INTEGER},0,0)
+  </insert>
+    <sql id="sql_minute">
+    floor((unix_timestamp(CURRENT_TIMESTAMP())-unix_timestamp(DISTRIBUTE_TIME))/60)
+  </sql>
+    <select id="selectOverdueRetained" resultType="java.util.Map">
+        select retained_id retainedId from retained_listenning
+        where listenning_status = 0 and
+        <include refid="sql_minute"/> &gt; 29 LIMIT 0,200
+    </select>
+    <select id="selectCount" resultType="integer">
+        select count(*) from retained_listenning
+        where listenning_status = 0 and
+        <include refid="sql_minute"/> &gt; 29
+    </select>
+
+    <update id="updateOverdueRetained">
+        update retained_listenning set listenning_status = 1
+        where RETAINED_ID in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.retainedId,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <update id="updateOverdueRetainedById">
+    update retained_listenning set LISTENNING_STATUS = 1
+    where retained_id = #{retainedId,jdbcType=INTEGER}
+  </update>
+</mapper>

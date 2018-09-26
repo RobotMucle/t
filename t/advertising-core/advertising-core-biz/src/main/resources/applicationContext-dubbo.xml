@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="${dubbo.application}"/>
+
+    <dubbo:registry id="dubboRegistry" address="${dubbo.address}"/>
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.port}" accesslog="./../advertising-core-biz/logs/dubbo.log"
+                    dispatcher="execution" threadpool="limited" threads="100"/>
+
+    <!--提供者-->
+    <dubbo:provider threadpool="limited"
+                    timeout="60000"
+                    retries="0"
+                    threads="200"
+                    loadbalance="random"
+                    registry="dubboRegistry"
+    />
+    <!-- 核心任务 -->
+    <dubbo:service interface="com.xtzn.core.business.ITaskBusiness"
+                   ref="taskBusiness"
+                   timeout="60000" loadbalance="random" cluster="failover" version="1.0.0"/>
+    <dubbo:service interface="com.xtzn.core.business.IRetainedBusiness"
+                   ref="retainedBusiness"
+                   timeout="60000" loadbalance="random" cluster="failover" version="1.0.0"/>
+
+
+</beans>

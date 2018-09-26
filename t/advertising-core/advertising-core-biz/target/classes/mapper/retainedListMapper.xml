@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.core.mapper.IRetainedListMapper">
+    <resultMap id="BaseResultMap" type="com.xtzn.core.mapper.entity.RetainedList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="UPLOAD_PATH" jdbcType="VARCHAR" property="uploadPath"/>
+        <result column="KEEP_DAYS" jdbcType="INTEGER" property="keepDays"/>
+        <result column="UPLOAD_TIME" jdbcType="TIMESTAMP" property="uploadTime"/>
+        <result column="PHONE_GROUP" jdbcType="INTEGER" property="phoneGroup"/>
+        <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode"/>
+        <result column="SECOND_LOGIN_SIGN" jdbcType="TINYINT" property="secondLoginSign"/>
+        <result column="RETAINED_PERCENT" jdbcType="VARCHAR" property="retainedPercent"/>
+        <result column="TASK_ID" jdbcType="INTEGER" property="taskId"/>
+        <result column="IP_ADDRESS" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="USED_CNT" jdbcType="INTEGER" property="usedCnt"/>
+        <result column="IS_DO_SIGN" jdbcType="TINYINT" property="isDoSign"/>
+        <result column="SUB_ID" jdbcType="VARCHAR" property="subId"/>
+        <result column="IS_SUCCESS" jdbcType="TINYINT" property="isSuccess"/>
+        <result column="IS_NEW_PHONE" jdbcType="TINYINT" property="isNewPhone"/>
+        <result column="LONG_TIME_SIGN" jdbcType="TINYINT" property="longTimeSign"/>
+        <result column="LEVEL_TYPE" jdbcType="TINYINT" property="levelType"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_days">
+    TO_DAYS(CURRENT_TIMESTAMP())-TO_DAYS(UPLOAD_TIME)
+  </sql>
+    <sql id="sql_retained_data">
+    a.ID id,
+    a.UPLOAD_PATH uploadPath,
+    a.KEEP_DAYS keepDays,
+    a.UPLOAD_TIME uploadTime,
+    a.TASK_ID taskId,
+    a.LONG_TIME_SIGN longTimeSign,
+    a.LEVEL_TYPE levelType, 
+    b.COUNTRY country,
+    b.AFFILIATE_ACCOUNT affiliateAccount,  
+    b.PLAY_TIME_MIN playTimeMin,
+    b.PLAY_TIME_MAX playTimeMax,
+    b.GENERATE_RETAINED_TYPE generateRetainedType,
+    b.EVERYDAY_LEVEL_MIN everydayLevelMin,
+    b.EVERYDAY_LEVEL_MAX everydayLevelMax,
+    b.MORROW_LEVEL_MIN morrowdayLevelMin,
+    b.MORROW_LEVEL_MAX morrowdayLevelMax,
+    c.CONFIGURATION_NAME configurationName,
+    c.SCRIPT_NAME scriptName,
+    c.BUNDLE_NAME bundleName,
+    d.USER_NAME userName,
+    d.PASSWORD password,
+    c.THIRD_PARTY_NAME thirdPartyName
+  </sql>
+    <select id="selectGroupByTaskId1" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select count(*) as idCnt,
+        <include refid="sql_days"/>
+        as daysCnt from retained_list
+        where task_id = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/> &lt; keep_days + 1 group by daysCnt
+    </select>
+    <select id="selectGroupByTaskId2" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select count(*) as idCnt,
+        <include refid="sql_days"/>
+        as daysCnt from retained_list
+        where task_id = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/> &lt; keep_days + 1 group by daysCnt
+    </select>
+    <select id="selectRetainedData" resultType="com.xtzn.core.vo.RetainedResponse">
+        select
+        <include refid="sql_retained_data"/>
+        from retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        left join task_configuration as c on b.TASK_CONFIGURATION_ID = c.ID
+        left join apple_account as d on c.APPLE_ACCOUNT_ID = d.ID
+        where a.IS_DO_SIGN = 1 and a.UPLOAD_PATH like #{upload,jdbcType=VARCHAR} and a.USER_ID =
+        #{userId,jdbcType=INTEGER} order by a.USED_CNT asc limit 1
+    </select>
+    <select id="selectRetainedSecondLoginData" resultType="com.xtzn.core.vo.RetainedResponse">
+        select
+        <include refid="sql_retained_data"/>
+        from retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        left join task_configuration as c on b.TASK_CONFIGURATION_ID = c.ID
+        left join apple_account as d on c.APPLE_ACCOUNT_ID = d.ID
+        where a.IS_DO_SIGN = 0 and a.UPLOAD_PATH like #{upload,jdbcType=VARCHAR} and a.SECOND_LOGIN_SIGN = 1 and
+        a.USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="selectYestodayUndo" resultType="java.util.Map">
+    select count(*) undoNum,USER_ID userId from retained_list where IS_DO_SIGN = 1  group by USER_ID
+  </select>
+    <select id="selectYestodayUndoByUserId" resultType="java.lang.Integer">
+    select count(*) from retained_list where IS_DO_SIGN = 1 and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <update id="updateEmptyRetained">
+    update retained_list 
+    set  SECOND_LOGIN_SIGN = 0,
+         IS_DO_SIGN = 0
+    where is_success = 1 and (SECOND_LOGIN_SIGN = 1 or IS_DO_SIGN = 1)           
+  </update>
+    <update id="updateRetainedStatusForUsual1">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and is_do_sign = 0 order by used_cnt desc limit #{taskCnt,jdbcType=INTEGER}
+    </update>
+    <update id="updateRetainedStatusForUsual2">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and is_do_sign = 0 order by used_cnt desc limit #{taskCnt,jdbcType=INTEGER}
+    </update>
+    <update id="updateRetainedStatusForSpecial1">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and is_do_sign = 0 order by LONG_TIME_SIGN desc,used_cnt desc limit
+        #{taskCnt,jdbcType=INTEGER}
+    </update>
+    <update id="updateRetainedStatusForSpecial2">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and is_do_sign = 0 order by LONG_TIME_SIGN desc,used_cnt desc limit
+        #{taskCnt,jdbcType=INTEGER}
+    </update>
+    <update id="updateLevelType1">
+        update retained_list
+        set LEVEL_TYPE = #{levelType,jdbcType=TINYINT}
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = 1 and is_do_sign = 0 order by used_cnt desc limit #{limit}
+    </update>
+    <update id="updateLevelType2">
+        update retained_list
+        set LEVEL_TYPE = #{levelType,jdbcType=TINYINT}
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = 1 and is_do_sign = 0 order by used_cnt desc limit #{limit}
+    </update>
+    <update id="updateLevelRetained1">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER}
+        and level_type = #{levelType,jdbcType=TINYINT} and is_do_sign = 0 order by used_cnt desc limit
+        #{taskCnt,jdbcType=INTEGER}
+    </update>
+    <update id="updateLevelRetained2">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER}
+        and level_type = #{levelType,jdbcType=TINYINT} and is_do_sign = 0 order by used_cnt desc limit
+        #{taskCnt,jdbcType=INTEGER}
+    </update>
+    <update id="updateMorrowLevelType1">
+        update retained_list
+        set LEVEL_TYPE = 2
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and level_type = 1 and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and is_do_sign = 0
+    </update>
+    <update id="updateMorrowLevelType2">
+        update retained_list
+        set LEVEL_TYPE = 2
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and level_type = 1 and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and is_do_sign = 0
+    </update>
+    <update id="updateEverydayLevelRetained1">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and level_type = 0 and is_do_sign = 0
+    </update>
+    <update id="updateEverydayLevelRetained2">
+        update retained_list
+        set SECOND_LOGIN_SIGN = 1,
+        IS_DO_SIGN = 1
+        where TASK_ID = #{taskId,jdbcType=INTEGER} and is_success = 1 and UPLOAD_PATH is not null
+        and
+        <include refid="sql_days"/>
+        = #{daysCnt,jdbcType=INTEGER} and level_type = 0 and is_do_sign = 0
+    </update>
+    <insert id="insertRetained">
+    insert into retained_list (SUB_ID) values(#{subId,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateBatchOverdueRetained" parameterType="java.util.List">
+        update retained_list
+        set is_do_sign = 1
+        where id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.retainedId,jdbcType=INTEGER}
+        </foreach>
+        and is_do_sign = 0
+    </update>
+    <update id="updateDistributeRetained">
+    update retained_list 
+    set  is_do_sign = 0 where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

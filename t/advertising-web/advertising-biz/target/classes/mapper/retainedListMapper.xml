@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IRetainedListMapper">
+    <resultMap id="baseResultMap" type="com.xtzn.mapper.entity.RetainedList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="UPLOAD_PATH" jdbcType="VARCHAR" property="uploadPath"/>
+        <result column="KEEP_DAYS" jdbcType="INTEGER" property="keepDays"/>
+        <result column="UPLOAD_TIME" jdbcType="TIMESTAMP" property="uploadTime"/>
+        <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode"/>
+        <result column="SECOND_LOGIN_SIGN" jdbcType="TINYINT" property="secondLoginSign"/>
+        <result column="RETAINED_PERCENT" jdbcType="VARCHAR" property="retainedPercent"/>
+        <result column="TASK_ID" jdbcType="INTEGER" property="taskId"/>
+        <result column="IP_ADDRESS" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="USED_CNT" jdbcType="INTEGER" property="usedCnt"/>
+        <result column="IS_DO_SIGN" jdbcType="TINYINT" property="isDoSign"/>
+        <result column="SUB_ID" jdbcType="VARCHAR" property="subId"/>
+        <result column="IS_SUCCESS" jdbcType="TINYINT" property="isSuccess"/>
+        <result column="IS_NEW_PHONE" jdbcType="TINYINT" property="isNewPhone"/>
+        <result column="LONG_TIME_SIGN" jdbcType="TINYINT" property="longTimeSign"/>
+        <result column="LEVEL_TYPE" jdbcType="TINYINT" property="levelType"/>
+        <result column="LEVEL_COUNT" jdbcType="INTEGER" property="levelCount"/>
+        <result column="ACCOUNT_USER" jdbcType="VARCHAR" property="accountUser"/>
+        <result column="ACCOUNT_PWD" jdbcType="VARCHAR" property="accountPwd"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_retained">
+    a.ID id, a.UPLOAD_PATH uploadPath, a.KEEP_DAYS keepDays, a.UPLOAD_TIME uploadTime, a.PHONE_CODE phoneCode,b.AFFILIATE_ACCOUNT affiliateAccount,b.TASK_NAME taskName, b.COUNTRY country     
+  </sql>
+    <sql id="sql_report">
+    DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d') uploadTime,b.COUNRTY country,b.TASK_NAME taskName,b.TARGET_NUM targetNum
+  </sql>
+    <sql id="sql_days">
+    TO_DAYS(CURRENT_TIMESTAMP())-TO_DAYS(UPLOAD_TIME)
+  </sql>
+    <select id="selectYestodayDoTaskCount" resultType="java.lang.Integer">
+        select count(*) from retained_list where
+        <include refid="sql_days"/>
+        = 1 and IS_SUCCESS = 1 and UPLOAD_PATH is not null and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="selectTodayDoTaskCount" resultType="java.lang.Integer">
+        select count(*) from retained_list where
+        <include refid="sql_days"/>
+        = 0 and IS_SUCCESS = 1 and UPLOAD_PATH is not null and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="selectRetainedListdtlForReport" resultType="java.util.Map">
+    select UPLOAD_PATH uploadPath,ACCOUNT_USER accountUser,ACCOUNT_PWD accountPwd from retained_list
+    where TASK_ID = #{taskId,jdbcType=INTEGER} and DATE_FORMAT(UPLOAD_TIME,'%Y%m%d') = #{uploadTime,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER} and IS_SUCCESS = 1
+    limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+    <select id="selectCountByRetainedListdtlForReport" resultType="java.lang.Integer">
+    select count(*) from retained_list
+    where TASK_ID = #{taskId,jdbcType=INTEGER} and DATE_FORMAT(UPLOAD_TIME,'%Y%m%d') = #{uploadTime,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER} and IS_SUCCESS = 1   
+  </select>
+    <select id="selectRetainedListForManage" parameterType="com.xtzn.vo.TaskRequest" resultType="java.util.Map">
+        select
+        <include refid="sql_retained"/>
+        from retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='phoneCode!=null and phoneCode!=""'>
+                and a.PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+            </if>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+        </where>
+    </select>
+    <select id="selectCountForManage" parameterType="com.xtzn.vo.TaskRequest" resultType="java.lang.Integer">
+        select count(*) from retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='phoneCode!=null and phoneCode!=""'>
+                and a.PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+            </if>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectRetaiedListForReport" parameterType="com.xtzn.vo.TaskRequest" resultType="java.util.Map">
+        SELECT T1.finishNum,T1.taskId,
+        T1.uploadTime,T1.country,T1.taskName,T1.affiliateAccount,T1.targetNum,ROUND((T3.allPhone-T2.isOldPhone)/T3.allPhone*100)
+        newPhonePercent
+        FROM
+        (SELECT COUNT(a.id) AS finishNum,DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d') uploadTime,b.AFFILIATE_ACCOUNT
+        affiliateAccount,b.COUNTRY country,
+        b.TASK_NAME taskName,b.TARGET_NUM targetNum,a.TASK_ID taskId
+        FROM retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            and a.IS_SUCCESS = 1
+        </where>
+        group by uploadTime,country,affiliateAccount,taskName,targetNum,a.TASK_ID) T1,
+        (SELECT COUNT(a.id) AS isOldPhone,DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d') uploadTime,a.TASK_ID taskId
+        FROM retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            and a.IS_NEW_PHONE = 0
+        </where>
+        group by uploadTime,a.TASK_ID)T2,
+        (SELECT COUNT(a.id) AS allPhone,DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d') uploadTime,a.TASK_ID taskId
+        FROM retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        group by uploadTime,a.TASK_ID)T3
+        where T2.taskId=T3.taskId and T2.uploadTime=T3.uploadTime and T1.taskId=T2.taskId and
+        T1.uploadTime=T2.uploadTime limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER} ;
+    </select>
+    <select id="selectCountForReport" parameterType="com.xtzn.vo.TaskRequest" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM
+        (SELECT COUNT(a.id) AS isNewPhone,DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d') uploadTime,a.TASK_ID taskId
+        FROM retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        group by uploadTime,a.TASK_ID)T1
+    </select>
+    <select id="selectRetainedListForReplaceUploadPath" parameterType="com.xtzn.mapper.entity.RetainedList"
+            resultType="com.xtzn.mapper.entity.RetainedList">
+    select ID id,UPLOAD_PATH uploadPath from retained_list
+    where TASK_ID = #{taskId,jdbcType=INTEGER} and TO_DAYS(UPLOAD_TIME) = TO_DAYS(#{uploadTime,jdbcType=TIMESTAMP})
+    and id != #{id,jdbcType=INTEGER} and USER_ID = #{userId,jdbcType=INTEGER} and IS_DO_SIGN = 0 and SECOND_LOGIN_SIGN = 0
+  </select>
+    <select id="selectSubId" resultType="java.lang.String">
+    select SUB_ID from retained_list where SUB_ID = #{subId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectUploadPath" resultType="java.lang.String">
+    select UPLOAD_PATH from retained_list where SUB_ID = #{subId,jdbcType=VARCHAR}
+  </select>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from retained_list
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <delete id="deleteByCondition" parameterType="com.xtzn.vo.TaskRequest">
+        delete a from retained_list as a
+        left join task_list as b on a.TASK_ID = b.ID
+        <where>
+            <if test='phoneCode!=null and phoneCode!=""'>
+                and a.PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+            </if>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.UPLOAD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test='taskId!=null'>
+                and a.TASK_ID = #{taskId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </delete>
+    <insert id="insertRetainedList" parameterType="com.xtzn.mapper.entity.RetainedList">
+        insert into retained_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="uploadPath != null">
+                UPLOAD_PATH,
+            </if>
+            <if test="keepDays != null">
+                KEEP_DAYS,
+            </if>
+            <if test="uploadTime != null">
+                UPLOAD_TIME,
+            </if>
+            <if test="phoneCode != null">
+                PHONE_CODE,
+            </if>
+            <if test="secondLoginSign != null">
+                SECOND_LOGIN_SIGN,
+            </if>
+            <if test="retainedPercent != null">
+                RETAINED_PERCENT,
+            </if>
+            <if test="taskId != null">
+                TASK_ID,
+            </if>
+            <if test="ipAddress != null">
+                IP_ADDRESS,
+            </if>
+            <if test="usedCnt != null">
+                USED_CNT,
+            </if>
+            <if test="isDoSign != null">
+                IS_DO_SIGN,
+            </if>
+            <if test="subId != null">
+                SUB_ID,
+            </if>
+            <if test="isSuccess != null">
+                IS_SUCCESS,
+            </if>
+            <if test="isNewPhone != null">
+                IS_NEW_PHONE,
+            </if>
+            <if test="longTimeSign != null">
+                LONG_TIME_SIGN,
+            </if>
+            <if test="levelType != null">
+                LEVEL_TYPE,
+            </if>
+            <if test="levelCount != null">
+                LEVEL_COUNT,
+            </if>
+            <if test="accountUser != null">
+                ACCOUNT_USER,
+            </if>
+            <if test="accountPwd != null">
+                ACCOUNT_PWD,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="uploadPath != null">
+                #{uploadPath,jdbcType=VARCHAR},
+            </if>
+            <if test="keepDays != null">
+                #{keepDays,jdbcType=INTEGER},
+            </if>
+            <if test="uploadTime != null">
+                #{uploadTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phoneCode != null">
+                #{phoneCode,jdbcType=VARCHAR},
+            </if>
+            <if test="secondLoginSign != null">
+                #{secondLoginSign,jdbcType=TINYINT},
+            </if>
+            <if test="retainedPercent != null">
+                #{retainedPercent,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                #{taskId,jdbcType=INTEGER},
+            </if>
+            <if test="ipAddress != null">
+                #{ipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="usedCnt != null">
+                #{usedCnt,jdbcType=INTEGER},
+            </if>
+            <if test="isDoSign != null">
+                #{isDoSign,jdbcType=TINYINT},
+            </if>
+            <if test="subId != null">
+                #{subId,jdbcType=VARCHAR},
+            </if>
+            <if test="isSuccess != null">
+                #{isSuccess,jdbcType=TINYINT},
+            </if>
+            <if test="isNewPhone != null">
+                #{isNewPhone,jdbcType=TINYINT},
+            </if>
+            <if test="longTimeSign != null">
+                #{longTimeSign,jdbcType=TINYINT},
+            </if>
+            <if test="levelType != null">
+                #{levelType,jdbcType=TINYINT},
+            </if>
+            <if test="levelCount != null">
+                #{levelCount,jdbcType=INTEGER},
+            </if>
+            <if test="accountUser != null">
+                #{accountUser,jdbcType=VARCHAR},
+            </if>
+            <if test="accountPwd != null">
+                #{accountPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateRetainedList" parameterType="com.xtzn.mapper.entity.RetainedList">
+        update retained_list
+        <set>
+            <if test="uploadPath != null">
+                UPLOAD_PATH = #{uploadPath,jdbcType=VARCHAR},
+            </if>
+            <if test="keepDays != null">
+                KEEP_DAYS = #{keepDays,jdbcType=INTEGER},
+            </if>
+            <if test="uploadTime != null">
+                UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phoneCode != null">
+                PHONE_CODE = #{phoneCode,jdbcType=VARCHAR},
+            </if>
+            <if test="retainedPercent != null">
+                RETAINED_PERCENT = #{retainedPercent,jdbcType=VARCHAR},
+            </if>
+            <if test="taskId != null">
+                TASK_ID = #{taskId,jdbcType=INTEGER},
+            </if>
+            <if test="ipAddress != null">
+                IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="isDoSign != null">
+                IS_DO_SIGN = #{isDoSign,jdbcType=TINYINT},
+            </if>
+            <if test="isSuccess != null">
+                IS_SUCCESS = #{isSuccess,jdbcType=TINYINT},
+            </if>
+            <if test="isNewPhone != null">
+                IS_NEW_PHONE = #{isNewPhone,jdbcType=TINYINT},
+            </if>
+            <if test="longTimeSign != null">
+                LONG_TIME_SIGN = #{longTimeSign,jdbcType=TINYINT},
+            </if>
+            <if test="levelType != null">
+                LEVEL_TYPE = #{levelType,jdbcType=TINYINT},
+            </if>
+            <if test="levelCount != null">
+                LEVEL_COUNT = #{levelCount,jdbcType=INTEGER},
+            </if>
+            <if test="accountUser != null">
+                ACCOUNT_USER = #{accountUser,jdbcType=VARCHAR},
+            </if>
+            <if test="accountPwd != null">
+                ACCOUNT_PWD = #{accountPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where SUB_ID = #{subId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateRetainedListForlua" parameterType="com.xtzn.mapper.entity.RetainedList">
+        update retained_list
+        <set>
+            <if test="uploadPath != null">
+                UPLOAD_PATH = #{uploadPath,jdbcType=VARCHAR},
+            </if>
+            <if test="isDoSign != null">
+                IS_DO_SIGN = #{isDoSign,jdbcType=TINYINT},
+            </if>
+            <if test="levelCount != null">
+                LEVEL_COUNT = LEVEL_COUNT + #{levelCount,jdbcType=INTEGER},
+            </if>
+            <if test="usedCnt != null">
+                USED_CNT = USED_CNT + 1,
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateIsSuccessBySubId">
+    update retained_list set IS_SUCCESS = 1 where SUB_ID = #{subId,jdbcType=VARCHAR}
+  </update>
+</mapper>

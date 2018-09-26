@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IAppleAccountMapper">
+
+    <sql id="sql_base">
+    ID id, USER_NAME userName,PASSWORD password,COUNTRY country,STATUS status
+  </sql>
+    <select id="selectAppleAccountByPageIndex" parameterType="com.xtzn.vo.DataRequest"
+            resultType="com.xtzn.mapper.entity.AppleAccount">
+        select
+        <include refid="sql_base"/>
+        from apple_account
+        <where>
+            <if test="status!=null">
+                and STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="userName!=null">
+                and USER_NAME = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="country!=null">
+                and COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by ID DESC limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectUsingAppleAccount" resultType="com.xtzn.mapper.entity.AppleAccount">
+        select
+        <include refid="sql_base"/>
+        from apple_account where STATUS = 1
+    </select>
+    <select id="selectCount" parameterType="com.xtzn.vo.DataRequest" resultType="java.lang.Integer">
+        select count(*) from apple_account
+        <where>
+            <if test="status!=null">
+                and STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="userName!=null">
+                and USER_NAME = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="country!=null">
+                and COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectAppleAccountById" resultType="com.xtzn.mapper.entity.AppleAccount">
+        select
+        <include refid="sql_base"/>
+        from apple_account
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAppleAccountByCountry" parameterType="com.xtzn.mapper.entity.AppleAccount"
+            resultType="com.xtzn.mapper.entity.AppleAccount">
+        select ID id, USER_NAME userName,PASSWORD password from apple_account
+        <where>
+            STATUS = 1
+            <if test='country!=null and country!=""'>
+                and COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by ID DESC
+    </select>
+    <select id="selectNeedUnlockAppleAccount" resultType="com.xtzn.mapper.entity.AppleAccount">
+   select USER_NAME userName,PASSWORD password,COUNTRY country from apple_account where STATUS = 0
+  </select>
+    <insert id="insertBatchAppleAccount" parameterType="java.util.List">
+        insert into apple_account (USER_NAME,PASSWORD,COUNTRY,STATUS)
+        values
+        <foreach collection="list" index="index" item="item"
+                 separator=",">
+            #{item.userName,jdbcType=VARCHAR},
+            #{item.password,jdbcType=VARCHAR},
+            #{item.country,jdbcType=VARCHAR},
+            1,
+        </foreach>
+    </insert>
+    <insert id="insertAppleAccount" parameterType="com.xtzn.mapper.entity.AppleAccount">
+    insert into apple_account (ID,USER_NAME,PASSWORD,COUNTRY,STATUS)
+    values (null, #{userName,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{country,jdbcType=VARCHAR},1)
+  </insert>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from apple_account
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from apple_account
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateAppleAccountStatus">
+    update apple_account set STATUS = 1
+    where STATUS = 0
+  </update>
+    <update id="updateAppleAccountByLua">
+    update apple_account set STATUS = 0
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateAppleAccountContent" parameterType="com.xtzn.mapper.entity.AppleAccount">
+    update apple_account set USER_NAME = #{userName,jdbcType=VARCHAR},PASSWORD = #{password,jdbcType=VARCHAR},COUNTRY = #{country,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

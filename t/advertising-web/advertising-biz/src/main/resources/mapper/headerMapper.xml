@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IHeaderMapper">
+
+    <sql id="Base_Column_List">
+    ID id, USER_AGENT userAgent
+  </sql>
+
+    <select id="selectHeader" resultType="com.xtzn.mapper.entity.Header">
+        select
+        <include refid="Base_Column_List"/>
+        from header
+    </select>
+
+</mapper>

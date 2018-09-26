@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IThirdPartyMapper">
+    <sql id="sql_base">
+    ID id,NAME name
+  </sql>
+    <select id="selectThirdPartyByPage" resultType="com.xtzn.mapper.entity.ThirdParty">
+        select
+        <include refid="sql_base"/>
+        from third_party order by ID DESC
+    </select>
+    <select id="selectThirdPartyById" resultType="com.xtzn.mapper.entity.ThirdParty">
+        select
+        <include refid="sql_base"/>
+        from third_party where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from third_party
+  </select>
+    <select id="selectAllThirdParty" resultType="com.xtzn.mapper.entity.ThirdParty">
+        select
+        <include refid="sql_base"/>
+        from third_party
+    </select>
+
+    <select id="selectBatchNameById" parameterType="java.util.List" resultType="java.lang.String">
+        select name from third_party
+        where ID in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
+    <select id="selectNameByCondition" resultType="com.xtzn.mapper.entity.ThirdParty">
+     select ID id,NAME name from third_party where NAME = #{name,jdbcType=VARCHAR}
+  </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from third_party
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from third_party
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateThirdParty" parameterType="com.xtzn.mapper.entity.ThirdParty">
+    update third_party set NAME = #{name,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <insert id="insertThirdParty" parameterType="com.xtzn.mapper.entity.ThirdParty">
+    insert into third_party values(null,#{name,jdbcType=VARCHAR})
+  </insert>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.ITaskListenningMapper">
+
+
+    <sql id="sql_minute">
+    floor((unix_timestamp(CURRENT_TIMESTAMP())-unix_timestamp(DISTRIBUTE_TIME))/60)
+  </sql>
+    <select id="selectDistributeTime" resultType="java.util.Date">
+    select DISTRIBUTE_TIME distributeTime from task_listenning
+    where task_id = #{taskId,jdbcType=INTEGER} and phone_code = #{phoneCode,jdbcType=VARCHAR} and listenning_status = 0
+  </select>
+    <update id="updateByResultTask">
+     update task_listenning set listenning_status = 1
+     where listenning_status = 0 and task_id = #{taskId,jdbcType=INTEGER} and phone_code = #{phoneCode,jdbcType=VARCHAR}  
+  </update>
+</mapper>

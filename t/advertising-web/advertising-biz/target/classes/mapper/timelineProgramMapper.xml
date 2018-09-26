@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.ITimelineProgramMapper">
+
+    <sql id="sql_base">
+    ID id, PROGRAM_NAME programName,PROGRAM program,STATUS status
+  </sql>
+    <select id="selectTimelineProgramByPageIndex" resultType="com.xtzn.mapper.entity.TimelineProgram">
+        select
+        <include refid="sql_base"/>
+        from timeline_program where USER_ID = #{userId,jdbcType=INTEGER} limit
+        #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectUsingTimelineProgram" resultType="com.xtzn.mapper.entity.TimelineProgram">
+        select
+        <include refid="sql_base"/>
+        from timeline_program where USER_ID = #{userId,jdbcType=INTEGER} and STATUS = 1
+    </select>
+    <select id="selectTimelineProgramById" resultType="com.xtzn.mapper.entity.TimelineProgram">
+        select
+        <include refid="sql_base"/>
+        from timeline_program
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from timeline_program  where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <insert id="insertTimelineProgram" parameterType="com.xtzn.mapper.entity.TimelineProgram">
+    insert into timeline_program (ID,PROGRAM_NAME,PROGRAM,STATUS,USER_ID)
+    values (null, #{programName,jdbcType=VARCHAR},#{program,jdbcType=VARCHAR},1,#{userId,jdbcType=INTEGER})
+  </insert>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from timeline_program
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from timeline_program
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateTimelineProgramStatus">
+    update timeline_program set STATUS = #{status,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateTimelineProgramContent" parameterType="com.xtzn.mapper.entity.TimelineProgram">
+    update timeline_program set PROGRAM_NAME = #{programName,jdbcType=VARCHAR},PROGRAM = #{program,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

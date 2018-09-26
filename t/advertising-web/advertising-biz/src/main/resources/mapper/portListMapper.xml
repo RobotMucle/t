@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IPortListMapper">
+    <resultMap id="baseResultMap" type="com.xtzn.mapper.entity.PortList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="SERVER_ADDRESS" jdbcType="VARCHAR" property="serverAddress"/>
+        <result column="SERVER_PORT" jdbcType="VARCHAR" property="serverPort"/>
+        <result column="HTTP_PORT" jdbcType="VARCHAR" property="httpPort"/>
+        <result column="PORT" jdbcType="VARCHAR" property="port"/>
+        <result column="GROUP_NAME" jdbcType="VARCHAR" property="groupName"/>
+        <result column="GROUP_PASSWORD" jdbcType="VARCHAR" property="groupPassword"/>
+        <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID id, SERVER_ADDRESS serverAddress, SERVER_PORT serverPort, HTTP_PORT httpPort, PORT port,GROUP_NAME groupName,GROUP_PASSWORD groupPassword
+  </sql>
+    <sql id="sql_manage">
+    SERVER_ADDRESS serverAddress,SERVER_PORT serverPort, GROUP_NAME groupName,GROUP_PASSWORD groupPassword
+  </sql>
+    <select id="selectPortListByPage" parameterType="com.xtzn.vo.DataRequest" resultType="java.util.Map">
+        select count(*) amount,
+        <include refid="sql_manage"/>
+        from port_list
+        <where>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        group by SERVER_ADDRESS,SERVER_PORT,GROUP_NAME,GROUP_PASSWORD
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" parameterType="com.xtzn.vo.DataRequest" resultType="java.lang.Integer">
+        select count(*) from
+        (select
+        <include refid="sql_manage"/>
+        from port_list
+        <where>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        group by SERVER_ADDRESS,SERVER_PORT,GROUP_NAME,GROUP_PASSWORD)T
+    </select>
+    <select id="selectPortListInfo" resultType="java.util.Map">
+        select HTTP_PORT httpPort, PORT port, PHONE_CODE phoneCode from port_list
+        <where>
+            <if test="serverAddress != null">
+                and SERVER_ADDRESS = #{serverAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCountForPortListInfo" resultType="java.lang.Integer">
+        select count(*) from port_list
+        <where>
+            <if test="serverAddress != null and serverAddress != ''">
+                and SERVER_ADDRESS = #{serverAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectPortListByServerAddress" parameterType="com.xtzn.vo.PortRequest" resultType="java.util.Map">
+        select
+        <include refid="sql_manage"/>
+        from port_list
+        <where>
+            <if test="serverAddress != null">
+                and SERVER_ADDRESS = #{serverAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            group by SERVER_ADDRESS,SERVER_PORT,GROUP_NAME,GROUP_PASSWORD
+        </where>
+    </select>
+    <select id="selectPortListForLua" parameterType="com.xtzn.mapper.entity.PortList" resultType="java.util.Map">
+        select
+        <include refid="sql_base"/>
+        from port_list
+        <where>
+            <if test="phoneCode != null">
+                and PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="phoneCode == null">
+                and PHONE_CODE is null
+            </if>
+        </where>
+        limit 1
+    </select>
+    <insert id="insertBatchPortList" parameterType="java.util.List">
+        insert into port_list
+        (
+        SERVER_ADDRESS,
+        SERVER_PORT,
+        HTTP_PORT,
+        PORT,
+        GROUP_NAME,
+        GROUP_PASSWORD,
+        USER_ID
+        )
+        values
+        <foreach collection="list" index="index" item="item"
+                 separator=",">
+            (
+            #{item.serverAddress,jdbcType=VARCHAR},
+            #{item.serverPort,jdbcType=VARCHAR},
+            #{item.httpPort,jdbcType=VARCHAR},
+            #{item.port,jdbcType=VARCHAR},
+            #{item.groupName,jdbcType=VARCHAR},
+            #{item.groupPassword,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+    <update id="updatePortList" parameterType="com.xtzn.vo.PortRequest">
+        update port_list
+        <set>
+            <if test="newServerAddress != null">
+                SERVER_ADDRESS = #{newServerAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="serverPort != null">
+                SERVER_PORT = #{serverPort,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="groupPassword != null">
+                GROUP_PASSWORD = #{groupPassword,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            <if test="oldServerAddress != null">
+                and SERVER_ADDRESS = #{oldServerAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </update>
+    <update id="updatePhoneCode" parameterType="com.xtzn.vo.PortRequest">
+        update port_list set PHONE_CODE = null
+        <where>
+            <if test="serverAddress != null">
+                and SERVER_ADDRESS = #{serverAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </update>
+    <update id="updatePhoneCodeByLua">
+     update port_list set PHONE_CODE = #{phoneCode,jdbcType=VARCHAR} where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <delete id="deleteBatchByCondition" parameterType="com.xtzn.vo.PortRequest">
+        delete from port_list
+        <where>
+            <if test="serverAddress != null">
+                and SERVER_ADDRESS = #{serverAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </delete>
+</mapper>

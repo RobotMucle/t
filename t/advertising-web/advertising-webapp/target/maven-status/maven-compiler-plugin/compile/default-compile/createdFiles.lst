@@ -1,0 +1,11 @@
+com\xtzn\web\controller\IggManageController.class
+com\xtzn\web\controller\DataManageController.class
+com\xtzn\web\controller\LuaDubboController.class
+com\xtzn\web\controller\MobileVersionManageController.class
+com\xtzn\web\controller\PersonDataManageController.class
+com\xtzn\web\common\Test.class
+com\xtzn\web\controller\TaskController.class
+com\xtzn\web\controller\LuaController.class
+com\xtzn\web\controller\UserManageController.class
+com\xtzn\web\controller\RunClickController.class
+com\xtzn\web\controller\AccountManageController.class

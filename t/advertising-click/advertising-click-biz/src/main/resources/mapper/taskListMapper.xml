@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.click.mapper.ITaskListMapper">
+    <resultMap id="BaseResultMap" type="com.xtzn.click.mapper.entity.TaskList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="TASK_NAME" jdbcType="VARCHAR" property="taskName"/>
+        <result column="TARGET_NUM" jdbcType="INTEGER" property="targetNum"/>
+        <result column="FINISH_NUM" jdbcType="INTEGER" property="finishNum"/>
+        <result column="WAITING_FOR_NUM" jdbcType="INTEGER" property="waitingForNum"/>
+        <result column="LINK_STATE" jdbcType="TINYINT" property="linkState"/>
+        <result column="ERROR_NUM" jdbcType="INTEGER" property="errorNum"/>
+        <result column="COUNTRY" jdbcType="VARCHAR" property="country"/>
+        <result column="AFFILIATE_ACCOUNT" jdbcType="VARCHAR" property="affiliateAccount"/>
+        <result column="LANDING_PAGE_LINK" jdbcType="VARCHAR" property="landingPageLink"/>
+        <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="PLAY_TIME_MIN" jdbcType="INTEGER" property="playTimeMin"/>
+        <result column="PLAY_TIME_MAX" jdbcType="INTEGER" property="playTimeMax"/>
+        <result column="LINK_WAIT_TIME" jdbcType="INTEGER" property="linkWaitTime"/>
+        <result column="APP_WAIT_TIME" jdbcType="INTEGER" property="appWaitTime"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="RETAINED_PERCENT" jdbcType="VARCHAR" property="retainedPercent"/>
+        <result column="RETAIN_KEEP_DAYS" jdbcType="INTEGER" property="retainKeepDays"/>
+        <result column="IS_CHANGE_IDFA" jdbcType="TINYINT" property="isChangeIdfa"/>
+        <result column="TIMELINE" jdbcType="VARCHAR" property="timeline"/>
+        <result column="TIMELINEDTL" jdbcType="VARCHAR" property="timelinedtl"/>
+        <result column="CR_MIN" jdbcType="REAL" property="crMin"/>
+        <result column="CR_MAX" jdbcType="REAL" property="crMax"/>
+        <result column="CR_VALUE" jdbcType="REAL" property="crValue"/>
+        <result column="TYPE" jdbcType="TINYINT" property="type"/>
+        <result column="DOWNLOAD_TYPE" jdbcType="TINYINT" property="downloadType"/>
+        <result column="CLICK_NUM" jdbcType="INTEGER" property="clickNum"/>
+        <result column="NEW_PHONE_PERCENT" jdbcType="VARCHAR" property="newPhonePercent"/>
+        <result column="CHANGE_TIME" jdbcType="TIMESTAMP" property="changeTime"/>
+        <result column="TASK_CONFIGURATION_ID" jdbcType="INTEGER" property="taskConfigurationId"/>
+        <result column="THREAD_NUM" jdbcType="INTEGER" property="threadNum"/>
+        <result column="IS_UNLOCK_CLICK" jdbcType="TINYINT" property="isUnlockClick"/>
+        <result column="GENERATE_RETAINED_TYPE" jdbcType="TINYINT" property="generateRetainedType"/>
+    </resultMap>
+    <sql id="sql_run_click">
+    STATUS,LANDING_PAGE_LINK,IS_RUN_CLICK,IS_UNLOCK_CLICK,CR_VALUE,COUNTRY
+  </sql>
+    <select id="selectForRunClick" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="sql_run_click"/>
+        from task_list
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <update id="updateClickNum" parameterType="java.lang.Integer">
+      update task_list set click_num = click_num + 1
+      where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateIsUnlockClick">
+      update task_list set is_unlock_click = #{isUnlockClick,jdbcType=TINYINT}
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

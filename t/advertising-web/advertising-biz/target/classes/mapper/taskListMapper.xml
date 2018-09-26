@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.ITaskListMapper">
+    <resultMap id="taskListResultMap" type="com.xtzn.mapper.entity.TaskList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="TASK_NAME" jdbcType="VARCHAR" property="taskName"/>
+        <result column="TARGET_NUM" jdbcType="INTEGER" property="targetNum"/>
+        <result column="FINISH_NUM" jdbcType="INTEGER" property="finishNum"/>
+        <result column="WAITING_FOR_NUM" jdbcType="INTEGER" property="waitingForNum"/>
+        <result column="LINK_STATE" jdbcType="TINYINT" property="linkState"/>
+        <result column="ERROR_NUM" jdbcType="INTEGER" property="errorNum"/>
+        <result column="COUNTRY" jdbcType="VARCHAR" property="country"/>
+        <result column="AFFILIATE_ACCOUNT" jdbcType="VARCHAR" property="affiliateAccount"/>
+        <result column="LANDING_PAGE_LINK" jdbcType="VARCHAR" property="landingPageLink"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="OVERDUE_TIME" jdbcType="INTEGER" property="overdueTime"/>
+        <result column="PLAY_TIME_MIN" jdbcType="INTEGER" property="playTimeMin"/>
+        <result column="PLAY_TIME_MAX" jdbcType="INTEGER" property="playTimeMax"/>
+        <result column="SPECIAL_TIME_MIN" jdbcType="INTEGER" property="specialTimeMin"/>
+        <result column="SPECIAL_TIME_MAX" jdbcType="INTEGER" property="specialTimeMax"/>
+        <result column="SPECIAL_PERCENT" jdbcType="INTEGER" property="specialPercent"/>
+        <result column="LINK_WAIT_TIME" jdbcType="INTEGER" property="linkWaitTime"/>
+        <result column="APP_WAIT_TIME" jdbcType="INTEGER" property="appWaitTime"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="RETAINED_PERCENT" jdbcType="VARCHAR" property="retainedPercent"/>
+        <result column="RETAIN_KEEP_DAYS" jdbcType="INTEGER" property="retainKeepDays"/>
+        <result column="IS_CHANGE_IDFA" jdbcType="TINYINT" property="isChangeIdfa"/>
+        <result column="TIMELINE" jdbcType="VARCHAR" property="timeline"/>
+        <result column="TIMELINEDTL" jdbcType="VARCHAR" property="timelinedtl"/>
+        <result column="CR_MIN" jdbcType="DOUBLE" property="crMin"/>
+        <result column="CR_MAX" jdbcType="DOUBLE" property="crMax"/>
+        <result column="CR_VALUE" jdbcType="DOUBLE" property="crValue"/>
+        <result column="TYPE" jdbcType="TINYINT" property="type"/>
+        <result column="DOWNLOAD_TYPE" jdbcType="TINYINT" property="downloadType"/>
+        <result column="CLICK_NUM" jdbcType="INTEGER" property="clickNum"/>
+        <result column="NEW_PHONE_PERCENT" jdbcType="VARCHAR" property="newPhonePercent"/>
+        <result column="CHANGE_TIME" jdbcType="TIMESTAMP" property="changeTime"/>
+        <result column="TASK_CONFIGURATION_ID" jdbcType="INTEGER" property="taskConfigurationId"/>
+        <result column="IS_RUN_CLICK" jdbcType="TINYINT" property="isRunClick"/>
+        <result column="IS_UNLOCK_CLICK" jdbcType="TINYINT" property="isUnlockClick"/>
+        <result column="GENERATE_RETAINED_TYPE" jdbcType="TINYINT" property="generateRetainedType"/>
+        <result column="TASK_MODEL" jdbcType="TINYINT" property="taskModel"/>
+        <result column="MODEL_RANK" jdbcType="TINYINT" property="modelRank"/>
+        <result column="TODAY_LEVEL_MIN" jdbcType="INTEGER" property="todayLevelMin"/>
+        <result column="TODAY_LEVEL_MAX" jdbcType="INTEGER" property="todayLevelMax"/>
+        <result column="TODAY_LEVEL_PERCENT" jdbcType="DOUBLE" property="todayLevelPercent"/>
+        <result column="MORROW_LEVEL_MIN" jdbcType="INTEGER" property="morrowLevelMin"/>
+        <result column="MORROW_LEVEL_MAX" jdbcType="INTEGER" property="morrowLevelMax"/>
+        <result column="MORROW_LEVEL_PERCENT" jdbcType="DOUBLE" property="morrowLevelPercent"/>
+        <result column="EVERYDAY_LEVEL_MIN" jdbcType="INTEGER" property="everydayLevelMin"/>
+        <result column="EVERYDAY_LEVEL_MAX" jdbcType="INTEGER" property="everydayLevelMax"/>
+        <result column="EVERYDAY_LEVEL_PERCENT" jdbcType="DOUBLE" property="everydayLevelPercent"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID, TASK_NAME, TARGET_NUM, FINISH_NUM, WAITING_FOR_NUM, LINK_STATE, ERROR_NUM, COUNTRY, 
+    AFFILIATE_ACCOUNT, LANDING_PAGE_LINK, CREATE_TIME, OVERDUE_TIME, PLAY_TIME_MIN, PLAY_TIME_MAX, 
+    SPECIAL_TIME_MIN, SPECIAL_TIME_MAX, SPECIAL_PERCENT, LINK_WAIT_TIME, APP_WAIT_TIME, STATUS, RETAINED_PERCENT, 
+    RETAIN_KEEP_DAYS, IS_CHANGE_IDFA, TIMELINE, TIMELINEDTL, CR_MIN, CR_MAX, CR_VALUE, 
+    TYPE, DOWNLOAD_TYPE, CLICK_NUM, NEW_PHONE_PERCENT, CHANGE_TIME, TASK_CONFIGURATION_ID, 
+    IS_RUN_CLICK, IS_UNLOCK_CLICK, GENERATE_RETAINED_TYPE, TASK_MODEL, MODEL_RANK, 
+    TODAY_LEVEL_MIN, TODAY_LEVEL_MAX, TODAY_LEVEL_PERCENT, MORROW_LEVEL_MIN, MORROW_LEVEL_MAX, 
+    MORROW_LEVEL_PERCENT, EVERYDAY_LEVEL_MIN, EVERYDAY_LEVEL_MAX, EVERYDAY_LEVEL_PERCENT
+  </sql>
+    <select id="selectTaskListByPage" resultMap="taskListResultMap">
+        select
+        <include refid="sql_base"/>
+        from task_list
+        <where>
+            USER_ID = #{userId,jdbcType=INTEGER} and TYPE = #{type,jdbcType=TINYINT}
+            <if test="affiliateAccount != null">
+                and AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="affiliateName != null">
+                and AFFILIATE_ACCOUNT  LIKE CONCAT(#{affiliateName,jdbcType=VARCHAR},"%")
+            </if>
+            <if test="taskName != null">
+                and TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test="country != null">
+                and COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test="status == null">
+                and STATUS != 3
+            </if>
+            order by ID desc
+        </where>
+    </select>
+    <select id="selectCount" parameterType="com.xtzn.vo.TaskRequest" resultType="java.lang.Integer">
+        select count(*) from task_list
+        <where>
+            USER_ID = #{userId,jdbcType=INTEGER} and TYPE = #{type,jdbcType=TINYINT} and STATUS != 3
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="affiliateName != null">
+                and AFFILIATE_ACCOUNT  LIKE CONCAT(#{affiliateName,jdbcType=VARCHAR},"%")
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectTaskListById" resultMap="taskListResultMap">
+        select
+        <include refid="sql_base"/>
+        from task_list
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectTargrtNumForHomepage" resultType="java.lang.Integer">
+    SELECT SUM(TARGET_NUM) from task_list where STATUS = 1 and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectFinishNumForHomepage">
+    SELECT SUM(FINISH_NUM) from task_list where STATUS = 1 and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from task_list
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from task_list
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateBatchById" parameterType="java.util.List">
+        update task_list set STATUS = 3
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <update id="updateLinkStateById" parameterType="com.xtzn.mapper.entity.TaskList">
+    update task_list set LINK_STATE = #{linkState,jdbcType=TINYINT}, WAITING_FOR_NUM = WAITING_FOR_NUM + 1
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateFinishNum">
+    update task_list set LINK_STATE = 1,FINISH_NUM = FINISH_NUM + 1 where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <insert id="insertTaskList" parameterType="com.xtzn.mapper.entity.TaskList">
+        insert into task_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="taskName != null">
+                TASK_NAME,
+            </if>
+            <if test="targetNum != null">
+                TARGET_NUM,
+            </if>
+            <if test="finishNum != null">
+                FINISH_NUM,
+            </if>
+            <if test="waitingForNum != null">
+                WAITING_FOR_NUM,
+            </if>
+            <if test="linkState != null">
+                LINK_STATE,
+            </if>
+            <if test="errorNum != null">
+                ERROR_NUM,
+            </if>
+            <if test="country != null">
+                COUNTRY,
+            </if>
+            <if test="affiliateAccount != null">
+                AFFILIATE_ACCOUNT,
+            </if>
+            <if test="landingPageLink != null">
+                LANDING_PAGE_LINK,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="overdueTime != null">
+                OVERDUE_TIME,
+            </if>
+            <if test="playTimeMin != null">
+                PLAY_TIME_MIN,
+            </if>
+            <if test="playTimeMax != null">
+                PLAY_TIME_MAX,
+            </if>
+            <if test="specialTimeMin != null">
+                SPECIAL_TIME_MIN,
+            </if>
+            <if test="specialTimeMax != null">
+                SPECIAL_TIME_MAX,
+            </if>
+            <if test="specialPercent != null">
+                SPECIAL_PERCENT,
+            </if>
+            <if test="linkWaitTime != null">
+                LINK_WAIT_TIME,
+            </if>
+            <if test="appWaitTime != null">
+                APP_WAIT_TIME,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="retainedPercent != null">
+                RETAINED_PERCENT,
+            </if>
+            <if test="retainKeepDays != null">
+                RETAIN_KEEP_DAYS,
+            </if>
+            <if test="isChangeIdfa != null">
+                IS_CHANGE_IDFA,
+            </if>
+            <if test="timeline != null">
+                TIMELINE,
+            </if>
+            <if test="timelinedtl != null">
+                TIMELINEDTL,
+            </if>
+            <if test="crMin != null">
+                CR_MIN,
+            </if>
+            <if test="crMax != null">
+                CR_MAX,
+            </if>
+            <if test="crValue != null">
+                CR_VALUE,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="downloadType != null">
+                DOWNLOAD_TYPE,
+            </if>
+            <if test="clickNum != null">
+                CLICK_NUM,
+            </if>
+            <if test="newPhonePercent != null">
+                NEW_PHONE_PERCENT,
+            </if>
+            <if test="changeTime != null">
+                CHANGE_TIME,
+            </if>
+            <if test="taskConfigurationId != null">
+                TASK_CONFIGURATION_ID,
+            </if>
+            <if test="isRunClick != null">
+                IS_RUN_CLICK,
+            </if>
+            <if test="isUnlockClick != null">
+                IS_UNLOCK_CLICK,
+            </if>
+            <if test="generateRetainedType != null">
+                GENERATE_RETAINED_TYPE,
+            </if>
+            <if test="taskModel != null">
+                TASK_MODEL,
+            </if>
+            <if test="modelRank != null">
+                MODEL_RANK,
+            </if>
+            <if test="todayLevelMin != null">
+                TODAY_LEVEL_MIN,
+            </if>
+            <if test="todayLevelMax != null">
+                TODAY_LEVEL_MAX,
+            </if>
+            <if test="todayLevelPercent != null">
+                TODAY_LEVEL_PERCENT,
+            </if>
+            <if test="morrowLevelMin != null">
+                MORROW_LEVEL_MIN,
+            </if>
+            <if test="morrowLevelMax != null">
+                MORROW_LEVEL_MAX,
+            </if>
+            <if test="morrowLevelPercent != null">
+                MORROW_LEVEL_PERCENT,
+            </if>
+            <if test="everydayLevelMin != null">
+                EVERYDAY_LEVEL_MIN,
+            </if>
+            <if test="everydayLevelMax != null">
+                EVERYDAY_LEVEL_MAX,
+            </if>
+            <if test="everydayLevelPercent != null">
+                EVERYDAY_LEVEL_PERCENT,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="taskName != null">
+                #{taskName,jdbcType=VARCHAR},
+            </if>
+            <if test="targetNum != null">
+                #{targetNum,jdbcType=INTEGER},
+            </if>
+            <if test="finishNum != null">
+                #{finishNum,jdbcType=INTEGER},
+            </if>
+            <if test="waitingForNum != null">
+                #{waitingForNum,jdbcType=INTEGER},
+            </if>
+            <if test="linkState != null">
+                #{linkState,jdbcType=TINYINT},
+            </if>
+            <if test="errorNum != null">
+                #{errorNum,jdbcType=INTEGER},
+            </if>
+            <if test="country != null">
+                #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="affiliateAccount != null">
+                #{affiliateAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="landingPageLink != null">
+                #{landingPageLink,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="overdueTime != null">
+                #{overdueTime,jdbcType=INTEGER},
+            </if>
+            <if test="playTimeMin != null">
+                #{playTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="playTimeMax != null">
+                #{playTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="specialTimeMin != null">
+                #{specialTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="specialTimeMax != null">
+                #{specialTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="specialPercent != null">
+                #{specialPercent,jdbcType=INTEGER},
+            </if>
+            <if test="linkWaitTime != null">
+                #{linkWaitTime,jdbcType=INTEGER},
+            </if>
+            <if test="appWaitTime != null">
+                #{appWaitTime,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="retainedPercent != null">
+                #{retainedPercent,jdbcType=VARCHAR},
+            </if>
+            <if test="retainKeepDays != null">
+                #{retainKeepDays,jdbcType=INTEGER},
+            </if>
+            <if test="isChangeIdfa != null">
+                #{isChangeIdfa,jdbcType=TINYINT},
+            </if>
+            <if test="timeline != null">
+                #{timeline,jdbcType=VARCHAR},
+            </if>
+            <if test="timelinedtl != null">
+                #{timelinedtl,jdbcType=VARCHAR},
+            </if>
+            <if test="crMin != null">
+                #{crMin,jdbcType=DOUBLE},
+            </if>
+            <if test="crMax != null">
+                #{crMax,jdbcType=DOUBLE},
+            </if>
+            <if test="crValue != null">
+                #{crValue,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="downloadType != null">
+                #{downloadType,jdbcType=TINYINT},
+            </if>
+            <if test="clickNum != null">
+                #{clickNum,jdbcType=INTEGER},
+            </if>
+            <if test="newPhonePercent != null">
+                #{newPhonePercent,jdbcType=VARCHAR},
+            </if>
+            <if test="changeTime != null">
+                #{changeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="taskConfigurationId != null">
+                #{taskConfigurationId,jdbcType=INTEGER},
+            </if>
+            <if test="isRunClick != null">
+                #{isRunClick,jdbcType=TINYINT},
+            </if>
+            <if test="isUnlockClick != null">
+                #{isUnlockClick,jdbcType=TINYINT},
+            </if>
+            <if test="generateRetainedType != null">
+                #{generateRetainedType,jdbcType=TINYINT},
+            </if>
+            <if test="taskModel != null">
+                #{taskModel,jdbcType=TINYINT},
+            </if>
+            <if test="modelRank != null">
+                #{modelRank,jdbcType=TINYINT},
+            </if>
+            <if test="todayLevelMin != null">
+                #{todayLevelMin,jdbcType=INTEGER},
+            </if>
+            <if test="todayLevelMax != null">
+                #{todayLevelMax,jdbcType=INTEGER},
+            </if>
+            <if test="todayLevelPercent != null">
+                #{todayLevelPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="morrowLevelMin != null">
+                #{morrowLevelMin,jdbcType=INTEGER},
+            </if>
+            <if test="morrowLevelMax != null">
+                #{morrowLevelMax,jdbcType=INTEGER},
+            </if>
+            <if test="morrowLevelPercent != null">
+                #{morrowLevelPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="everydayLevelMin != null">
+                #{everydayLevelMin,jdbcType=INTEGER},
+            </if>
+            <if test="everydayLevelMax != null">
+                #{everydayLevelMax,jdbcType=INTEGER},
+            </if>
+            <if test="everydayLevelPercent != null">
+                #{everydayLevelPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateTaskList" parameterType="com.xtzn.mapper.entity.TaskList">
+        update task_list
+        <set>
+            <if test="taskName != null">
+                TASK_NAME = #{taskName,jdbcType=VARCHAR},
+            </if>
+            <if test="targetNum != null">
+                TARGET_NUM = #{targetNum,jdbcType=INTEGER},
+            </if>
+            <if test="finishNum != null">
+                FINISH_NUM = #{finishNum,jdbcType=INTEGER},
+            </if>
+            <if test="waitingForNum != null">
+                WAITING_FOR_NUM = #{waitingForNum,jdbcType=INTEGER},
+            </if>
+            <if test="linkState != null">
+                LINK_STATE = #{linkState,jdbcType=TINYINT},
+            </if>
+            <if test="errorNum != null">
+                ERROR_NUM = #{errorNum,jdbcType=INTEGER},
+            </if>
+            <if test="country != null">
+                COUNTRY = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="affiliateAccount != null">
+                AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="landingPageLink != null">
+                LANDING_PAGE_LINK = #{landingPageLink,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="overdueTime != null">
+                OVERDUE_TIME = #{overdueTime,jdbcType=INTEGER},
+            </if>
+            <if test="playTimeMin != null">
+                PLAY_TIME_MIN = #{playTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="playTimeMax != null">
+                PLAY_TIME_MAX = #{playTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="specialTimeMin != null">
+                SPECIAL_TIME_MIN = #{specialTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="specialTimeMax != null">
+                SPECIAL_TIME_MAX = #{specialTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="specialPercent != null">
+                SPECIAL_PERCENT = #{specialPercent,jdbcType=INTEGER},
+            </if>
+            <if test="linkWaitTime != null">
+                LINK_WAIT_TIME = #{linkWaitTime,jdbcType=INTEGER},
+            </if>
+            <if test="appWaitTime != null">
+                APP_WAIT_TIME = #{appWaitTime,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="retainedPercent != null">
+                RETAINED_PERCENT = #{retainedPercent,jdbcType=VARCHAR},
+            </if>
+            <if test="retainKeepDays != null">
+                RETAIN_KEEP_DAYS = #{retainKeepDays,jdbcType=INTEGER},
+            </if>
+            <if test="isChangeIdfa != null">
+                IS_CHANGE_IDFA = #{isChangeIdfa,jdbcType=TINYINT},
+            </if>
+            <if test="timeline != null">
+                TIMELINE = #{timeline,jdbcType=VARCHAR},
+            </if>
+            <if test="timelinedtl != null">
+                TIMELINEDTL = #{timelinedtl,jdbcType=VARCHAR},
+            </if>
+            <if test="crMin != null">
+                CR_MIN = #{crMin,jdbcType=DOUBLE},
+            </if>
+            <if test="crMax != null">
+                CR_MAX = #{crMax,jdbcType=DOUBLE},
+            </if>
+            <if test="crValue != null">
+                CR_VALUE = #{crValue,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="downloadType != null">
+                DOWNLOAD_TYPE = #{downloadType,jdbcType=TINYINT},
+            </if>
+            <if test="clickNum != null">
+                CLICK_NUM = #{clickNum,jdbcType=INTEGER},
+            </if>
+            <if test="newPhonePercent != null">
+                NEW_PHONE_PERCENT = #{newPhonePercent,jdbcType=VARCHAR},
+            </if>
+            <if test="changeTime != null">
+                CHANGE_TIME = #{changeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="taskConfigurationId != null">
+                TASK_CONFIGURATION_ID = #{taskConfigurationId,jdbcType=INTEGER},
+            </if>
+            <if test="isRunClick != null">
+                IS_RUN_CLICK = #{isRunClick,jdbcType=TINYINT},
+            </if>
+            <if test="isUnlockClick != null">
+                IS_UNLOCK_CLICK = #{isUnlockClick,jdbcType=TINYINT},
+            </if>
+            <if test="generateRetainedType != null">
+                GENERATE_RETAINED_TYPE = #{generateRetainedType,jdbcType=TINYINT},
+            </if>
+            <if test="taskModel != null">
+                TASK_MODEL = #{taskModel,jdbcType=TINYINT},
+            </if>
+            <if test="modelRank != null">
+                MODEL_RANK = #{modelRank,jdbcType=TINYINT},
+            </if>
+            <if test="todayLevelMin != null">
+                TODAY_LEVEL_MIN = #{todayLevelMin,jdbcType=INTEGER},
+            </if>
+            <if test="todayLevelMax != null">
+                TODAY_LEVEL_MAX = #{todayLevelMax,jdbcType=INTEGER},
+            </if>
+            <if test="todayLevelPercent != null">
+                TODAY_LEVEL_PERCENT = #{todayLevelPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="morrowLevelMin != null">
+                MORROW_LEVEL_MIN = #{morrowLevelMin,jdbcType=INTEGER},
+            </if>
+            <if test="morrowLevelMax != null">
+                MORROW_LEVEL_MAX = #{morrowLevelMax,jdbcType=INTEGER},
+            </if>
+            <if test="morrowLevelPercent != null">
+                MORROW_LEVEL_PERCENT = #{morrowLevelPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="everydayLevelMin != null">
+                EVERYDAY_LEVEL_MIN = #{everydayLevelMin,jdbcType=INTEGER},
+            </if>
+            <if test="everydayLevelMax != null">
+                EVERYDAY_LEVEL_MAX = #{everydayLevelMax,jdbcType=INTEGER},
+            </if>
+            <if test="everydayLevelPercent != null">
+                EVERYDAY_LEVEL_PERCENT = #{everydayLevelPercent,jdbcType=DOUBLE},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateLinkState">
+    update task_list set LINK_STATE = 1
+    where LINK_STATE = #{linkState,jdbcType=TINYINT} and TYPE = #{type,jdbcType=TINYINT}  and USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+    <update id="updateTaskListCPI">
+        update task_list
+        <set>
+            <if test="waitingForNum != null">
+                WAITING_FOR_NUM = #{waitingForNum,jdbcType=INTEGER},
+            </if>
+            <if test="crMin != null">
+                CR_MIN = #{crMin,jdbcType=DOUBLE},
+            </if>
+            <if test="crMax != null">
+                CR_MAX = #{crMax,jdbcType=DOUBLE},
+            </if>
+            <if test="crValue != null">
+                CR_VALUE = #{crValue,jdbcType=DOUBLE},
+            </if>
+            <if test="playTimeMin != null">
+                PLAY_TIME_MIN = #{playTimeMin,jdbcType=INTEGER},
+            </if>
+            <if test="playTimeMax != null">
+                PLAY_TIME_MAX = #{playTimeMax,jdbcType=INTEGER},
+            </if>
+            <if test="targetNum != null">
+                TARGET_NUM = #{targetNum,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+</mapper>

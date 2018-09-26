@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.ITimezoneMapper">
+    <resultMap id="timezoneResultMap" type="com.xtzn.mapper.entity.Timezone">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="COUNTRY" jdbcType="VARCHAR" property="country"/>
+        <result column="TIMEZONE" jdbcType="VARCHAR" property="timezone"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="sql_base_list">
+    ID id, COUNTRY country, TIMEZONE timezone, STATUS status
+  </sql>
+    <select id="selectTimezoneByPageIndex" resultMap="timezoneResultMap">
+        select
+        <include refid="sql_base_list"/>
+        from timezone order by id desc limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectTimezoneById" resultMap="timezoneResultMap">
+        select
+        <include refid="sql_base_list"/>
+        from timezone
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from timezone
+  </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from timezone
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from timezone
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insertTimezone">
+    insert into timezone (ID, COUNTRY, TIMEZONE,STATUS)
+    values (null, #{country,jdbcType=VARCHAR}, #{timezone,jdbcType=VARCHAR},1)
+  </insert>
+    <update id="updateTimezoneStatus">
+    update timezone set STATUS = #{status,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateTimezoneContent" parameterType="com.xtzn.mapper.entity.Timezone">
+    update timezone set COUNTRY = #{country,jdbcType=VARCHAR},TIMEZONE = #{timezone,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

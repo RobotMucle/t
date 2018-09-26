@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IUserMapper">
+    <resultMap id="userResultMap" type="com.xtzn.mapper.entity.User">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="FRANCHISEE_NAME" jdbcType="VARCHAR" property="franchiseeName"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="IS_ADMIN" jdbcType="TINYINT" property="isAdmin"/>
+    </resultMap>
+    <sql id="sql_list">
+    ID, USER_NAME, PASSWORD, FRANCHISEE_NAME, STATUS, IS_ADMIN
+  </sql>
+    <select id="selectUserForLogin" resultMap="userResultMap">
+        select
+        <include refid="sql_list"/>
+        from user
+        where USER_NAME = #{userName,jdbcType=VARCHAR} and PASSWORD = #{password,jdbcType=VARCHAR} and STATUS = 1
+    </select>
+    <select id="selectUserByPage" resultMap="userResultMap">
+        select
+        <include refid="sql_list"/>
+        from user limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCommonUser" resultType="java.util.Map">
+    select  ID id,FRANCHISEE_NAME franchiseeName from user where IS_ADMIN = 0 and STATUS = 1
+  </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from user
+  </select>
+    <insert id="insertUser" parameterType="com.xtzn.mapper.entity.User">
+    insert into user (ID, USER_NAME, PASSWORD, 
+      FRANCHISEE_NAME, STATUS
+      )
+    values (null, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{franchiseeName,jdbcType=VARCHAR}, 1
+      )
+  </insert>
+    <update id="updateUser" parameterType="com.xtzn.mapper.entity.User">
+        update user
+        <set>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="franchiseeName != null">
+                FRANCHISEE_NAME = #{franchiseeName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

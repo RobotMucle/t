@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IPhoneListMapper">
+    <resultMap id="phoneListResultMap" type="com.xtzn.mapper.entity.PhoneList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode"/>
+        <result column="DUETIME" jdbcType="TIMESTAMP" property="duetime"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="REASON" jdbcType="VARCHAR" property="reason"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID, PHONE_CODE, DUETIME, STATUS, REASON
+  </sql>
+    <select id="selectPhoneListByPage" parameterType="com.xtzn.vo.DataRequest" resultMap="phoneListResultMap">
+        select
+        <include refid="sql_base"/>
+        from phone_list
+        <where>
+            <if test='status!=null and status!=""'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(DUETIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(DUETIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" parameterType="com.xtzn.vo.DataRequest" resultType="java.lang.Integer">
+        select count(*) from phone_list
+        <where>
+            <if test='status!=null and status!=""'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(DUETIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(DUETIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectPhoneListById" parameterType="java.lang.Integer" resultMap="phoneListResultMap">
+        select
+        <include refid="sql_base"/>
+        from phone_list
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from phone_list
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from phone_list
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insertBatchPhoneList">
+        insert into phone_list (PHONE_CODE, STATUS, USER_ID) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item,jdbcType=VARCHAR},1,#{userId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <update id="updatePhoneList" parameterType="com.xtzn.mapper.entity.PhoneList">
+        update phone_list
+        <set>
+            <if test="phoneCode != null">
+                PHONE_CODE = #{phoneCode,jdbcType=VARCHAR},
+            </if>
+            <if test="duetime != null">
+                DUETIME = #{duetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reason != null">
+                REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectPhoneCode" parameterType="com.xtzn.mapper.entity.PhoneList" resultType="java.lang.String">
+    select PHONE_CODE phoneCode from phone_list where PHONE_CODE = #{phoneCode,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <insert id="insertPhoneListByLua" parameterType="com.xtzn.mapper.entity.PhoneList">
+    insert into phone_list(PHONE_CODE, DUETIME, STATUS, USER_ID) values
+    (#{phoneCode,jdbcType=VARCHAR},#{duetime,jdbcType=TIMESTAMP},#{status,jdbcType=TINYINT},#{userId,jdbcType=INTEGER})    
+  </insert>
+    <update id="updatePhoneListByLua" parameterType="com.xtzn.mapper.entity.PhoneList">
+        update phone_list
+        <set>
+            <if test="duetime != null">
+                DUETIME = #{duetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reason != null">
+                REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where USER_ID = #{userId,jdbcType=INTEGER} and PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+    </update>
+</mapper>

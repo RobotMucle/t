@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.core.mapper.ITaskListMapper">
+    <resultMap id="BaseResultMap" type="com.xtzn.core.mapper.entity.TaskList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="TASK_NAME" jdbcType="VARCHAR" property="taskName"/>
+        <result column="TARGET_NUM" jdbcType="INTEGER" property="targetNum"/>
+        <result column="FINISH_NUM" jdbcType="INTEGER" property="finishNum"/>
+        <result column="WAITING_FOR_NUM" jdbcType="INTEGER" property="waitingForNum"/>
+        <result column="LINK_STATE" jdbcType="TINYINT" property="linkState"/>
+        <result column="ERROR_NUM" jdbcType="INTEGER" property="errorNum"/>
+        <result column="COUNTRY" jdbcType="VARCHAR" property="country"/>
+        <result column="AFFILIATE_ACCOUNT" jdbcType="VARCHAR" property="affiliateAccount"/>
+        <result column="LANDING_PAGE_LINK" jdbcType="VARCHAR" property="landingPageLink"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="OVERDUE_TIME" jdbcType="INTEGER" property="overdueTime"/>
+        <result column="PLAY_TIME_MIN" jdbcType="INTEGER" property="playTimeMin"/>
+        <result column="PLAY_TIME_MAX" jdbcType="INTEGER" property="playTimeMax"/>
+        <result column="SPECIAL_TIME_MIN" jdbcType="INTEGER" property="specialTimeMin"/>
+        <result column="SPECIAL_TIME_MAX" jdbcType="INTEGER" property="specialTimeMax"/>
+        <result column="SPECIAL_PERCENT" jdbcType="INTEGER" property="specialPercent"/>
+        <result column="LINK_WAIT_TIME" jdbcType="INTEGER" property="linkWaitTime"/>
+        <result column="APP_WAIT_TIME" jdbcType="INTEGER" property="appWaitTime"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="RETAINED_PERCENT" jdbcType="VARCHAR" property="retainedPercent"/>
+        <result column="RETAIN_KEEP_DAYS" jdbcType="INTEGER" property="retainKeepDays"/>
+        <result column="IS_CHANGE_IDFA" jdbcType="TINYINT" property="isChangeIdfa"/>
+        <result column="TIMELINE" jdbcType="VARCHAR" property="timeline"/>
+        <result column="TIMELINEDTL" jdbcType="VARCHAR" property="timelinedtl"/>
+        <result column="CR_MIN" jdbcType="DOUBLE" property="crMin"/>
+        <result column="CR_MAX" jdbcType="DOUBLE" property="crMax"/>
+        <result column="CR_VALUE" jdbcType="DOUBLE" property="crValue"/>
+        <result column="TYPE" jdbcType="TINYINT" property="type"/>
+        <result column="DOWNLOAD_TYPE" jdbcType="TINYINT" property="downloadType"/>
+        <result column="CLICK_NUM" jdbcType="INTEGER" property="clickNum"/>
+        <result column="NEW_PHONE_PERCENT" jdbcType="VARCHAR" property="newPhonePercent"/>
+        <result column="CHANGE_TIME" jdbcType="TIMESTAMP" property="changeTime"/>
+        <result column="TASK_CONFIGURATION_ID" jdbcType="INTEGER" property="taskConfigurationId"/>
+        <result column="IS_RUN_CLICK" jdbcType="TINYINT" property="isRunClick"/>
+        <result column="IS_UNLOCK_CLICK" jdbcType="TINYINT" property="isUnlockClick"/>
+        <result column="GENERATE_RETAINED_TYPE" jdbcType="TINYINT" property="generateRetainedType"/>
+        <result column="TASK_MODEL" jdbcType="TINYINT" property="taskModel"/>
+        <result column="MODEL_RANK" jdbcType="TINYINT" property="modelRank"/>
+        <result column="TODAY_LEVEL_MIN" jdbcType="INTEGER" property="todayLevelMin"/>
+        <result column="TODAY_LEVEL_MAX" jdbcType="INTEGER" property="todayLevelMax"/>
+        <result column="TODAY_LEVEL_PERCENT" jdbcType="DOUBLE" property="todayLevelPercent"/>
+        <result column="MORROW_LEVEL_MIN" jdbcType="INTEGER" property="morrowLevelMin"/>
+        <result column="MORROW_LEVEL_MAX" jdbcType="INTEGER" property="morrowLevelMax"/>
+        <result column="MORROW_LEVEL_PERCENT" jdbcType="DOUBLE" property="morrowLevelPercent"/>
+        <result column="EVERYDAY_LEVEL_MIN" jdbcType="INTEGER" property="everydayLevelMin"/>
+        <result column="EVERYDAY_LEVEL_MAX" jdbcType="INTEGER" property="everydayLevelMax"/>
+        <result column="EVERYDAY_LEVEL_PERCENT" jdbcType="DOUBLE" property="everydayLevelPercent"/>
+    </resultMap>
+    <sql id="sql_task_data">
+     a.ID id,
+     a.TASK_NAME taskName,
+     a.COUNTRY country,
+     a.AFFILIATE_ACCOUNT affiliateAccount,
+     a.LANDING_PAGE_LINK landingPageLink,
+     a.PLAY_TIME_MIN playTimeMin,
+     a.PLAY_TIME_MAX playTimeMax,
+     a.SPECIAL_TIME_MIN specialTimeMin,
+     a.SPECIAL_TIME_MAX specialTimeMax,
+     a.SPECIAL_PERCENT specialPercent,
+     a.LINK_WAIT_TIME linkWaitTime,
+     a.APP_WAIT_TIME appWaitTime,
+     a.RETAINED_PERCENT retainedPercent,
+     a.RETAIN_KEEP_DAYS retainKeepDays,
+     a.IS_CHANGE_IDFA isChangeIdfa,
+     a.TIMELINE timeline,
+     a.TIMELINEDTL timelinedtl,
+     a.TYPE type,
+     a.DOWNLOAD_TYPE downloadType,
+     a.NEW_PHONE_PERCENT newPhonePercent,
+     a.GENERATE_RETAINED_TYPE generateRetainedType,
+     a.TASK_MODEL taskModel,
+     a.TODAY_LEVEL_MIN todayLevelMin,
+     a.TODAY_LEVEL_MAX todayLevelMax,
+     a.TODAY_LEVEL_PERCENT todayLevelPercent,
+     a.EVERYDAY_LEVEL_MIN everydayLevelMin,
+     a.EVERYDAY_LEVEL_MAX everydayLevelMax,
+     b.CONFIGURATION_NAME configurationName,
+     b.SCRIPT_NAME scriptName,
+     b.BUNDLE_NAME bundleName,
+     c.USER_NAME userName,
+     c.PASSWORD password,
+     b.THIRD_PARTY_NAME thirdPartyName
+  </sql>
+    <sql id="sql_reset_task">
+    ID id,
+    TARGET_NUM targetNum,
+    TIMELINE timeline,
+    TIMELINEDTL timelinedtl
+  </sql>
+    <sql id="sql_for_retained">
+    ID id,
+    RETAINED_PERCENT retainedPercent,
+    MORROW_LEVEL_PERCENT morrowLevelPercent,
+    EVERYDAY_LEVEL_PERCENT everydayLevelPercent
+  </sql>
+    <select id="selectForResetTask" resultType="java.util.Map">
+        select
+        <include refid="sql_reset_task"/>
+        from task_list
+        where STATUS = 1 or STATUS = 2
+    </select>
+    <select id="selectForDistributeTask" resultType="java.util.Map">
+    select a.ID,a.TIMELINEDTL,b.TIMEZONE ,a.TASK_MODEL from task_list as a
+    left join timezone as b on a.COUNTRY = b.COUNTRY
+    where a.STATUS = 1
+  </select>
+    <select id="selectByGenerateRetainedType1" parameterType="java.lang.Byte" resultType="java.util.Map">
+        select
+        <include refid="sql_for_retained"/>
+        from task_list where GENERATE_RETAINED_TYPE = #{generateRetainedType,jdbcType=TINYINT} and USER_ID = 3
+    </select>
+    <select id="selectByGenerateRetainedType2" parameterType="java.lang.Byte" resultType="java.util.Map">
+        select
+        <include refid="sql_for_retained"/>
+        from task_list where GENERATE_RETAINED_TYPE = #{generateRetainedType,jdbcType=TINYINT} and USER_ID != 3
+    </select>
+    <select id="selectRobTaskData" resultType="com.xtzn.core.vo.TaskResponse">
+        select
+        <include refid="sql_task_data"/>
+        from task_list as a
+        left join task_configuration as b on a.TASK_CONFIGURATION_ID = b.ID
+        left join apple_account as c on b.APPLE_ACCOUNT_ID = c.ID
+        where a.status = 1 and a.LINK_STATE !=2  AND a.LINK_STATE !=3 and a.WAITING_FOR_NUM &gt; 0 and a.TASK_MODEL = 1 and a.USER_ID =
+        #{userId,jdbcType=INTEGER} and a.MODEL_RANK = #{modelRank,jdbcType=TINYINT}
+    </select>
+    <select id="selectRobTaskCount" resultType="java.lang.Integer">
+    SELECT count(*) FROM task_list WHERE USER_ID = #{userId,jdbcType=INTEGER} AND WAITING_FOR_NUM &gt; 0 AND TASK_MODEL = 1 AND STATUS = 1 AND LINK_STATE = 1
+  </select>
+    <select id="selectNormalTaskData" resultType="com.xtzn.core.vo.TaskResponse">
+        select
+        <include refid="sql_task_data"/>
+        from task_list as a
+        left join task_configuration as b on a.TASK_CONFIGURATION_ID = b.ID
+        left join apple_account as c on b.APPLE_ACCOUNT_ID = c.ID
+        <where>
+            a.status = 1 and a.WAITING_FOR_NUM &gt; 0 and a.TASK_MODEL = 0
+            <if test="linkState != null">
+                and a.LINK_STATE = #{linkState,jdbcType=TINYINT}
+            </if>
+            <if test="type != null">
+                and a.TYPE = #{type,jdbcType=TINYINT}
+            </if>
+            <if test="userId != null">
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectTargetNumSum" resultType="java.util.Map">
+    SELECT SUM(TARGET_NUM) targetNum,USER_ID userId from task_list where STATUS = 1 group by USER_ID
+  </select>
+    <select id="selectFinishNumSum" resultType="java.util.Map">
+    SELECT SUM(FINISH_NUM) finishNum,USER_ID userId from task_list where STATUS = 1 group by USER_ID
+  </select>
+
+    <select id="selectForTimeQuantum" resultType="java.util.Map">
+    select ID , TIMELINE from task_list
+    where STATUS = 1 and LINK_STATE = 1 or LINK_STATE = 2 and TASK_MODEL = 1
+  </select>
+    <update id="updateForTimeQuantum" parameterType="java.lang.Integer">
+      update task_list set WAITING_FOR_NUM = #{waitingForNum,jdbcType=INTEGER}
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <update id="updateTimelinedtl" parameterType="java.util.List">
+
+        update task_list set timelinedtl =
+        <foreach collection="list" item="item" index="index"
+                 separator=" " open="case ID" close="end">
+            when #{item.id,jdbcType=INTEGER} then #{item.timelinedtl,jdbcType=VARCHAR}
+        </foreach>
+        where id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <update id="updateWaitingForNum" parameterType="java.lang.Integer">
+      update task_list set waiting_for_num = case when waiting_for_num &lt; 1000 then waiting_for_num + 1 else waiting_for_num + 0 end
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateDistributeTaskWatingForNum" parameterType="java.lang.Integer">
+      update task_list set waiting_for_num = case when waiting_for_num &gt; 0 then waiting_for_num - 1 else waiting_for_num - 0 end
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateBatchDistributeTaskWatingForNum" parameterType="java.util.List">
+        update task_list set waiting_for_num = case when waiting_for_num &gt; 0 then waiting_for_num - 1 else
+        waiting_for_num - 0 end
+        where id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <update id="updateBatchWaitingForNumAdd" parameterType="java.util.List">
+        update task_list set waiting_for_num = case when waiting_for_num &lt; 1000 then waiting_for_num + 1 else
+        waiting_for_num + 0 end
+        where id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <update id="updateLinkStateNormal">
+    update task_list set LINK_STATE = 1 where LINK_STATE = 0
+  </update>
+    <update id="updateFinishNumEmpty">
+    update task_list set FINISH_NUM = 0,CLICK_NUM = 0  where STATUS = 1 or STATUS = 2
+  </update>
+    <update id="updateWaitingForNumEmpty">
+    update task_list set waiting_for_num = 0 where STATUS = 1 or STATUS = 2
+  </update>
+    <update id="updateWaitingForNumByCPA">
+    update task_list set waiting_for_num = 30 where TYPE = 1 and STATUS != 3
+  </update>
+
+    <update id="updateWaitingForNumEmpty100">
+      update task_list set WAITING_FOR_NUM=100 where `STATUS`=1 and `TYPE`=0 and TASK_MODEL=1
+    </update>
+</mapper>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IAccountInfoMapper">
+    <resultMap id="baseResultMap" type="com.xtzn.mapper.entity.AccountInfo">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="USER_PWD" jdbcType="VARCHAR" property="userPwd"/>
+        <result column="TYPE" jdbcType="INTEGER" property="type"/>
+        <result column="ADD_TIME" jdbcType="TIMESTAMP" property="addTime"/>
+        <result column="USED_TIME" jdbcType="TIMESTAMP" property="usedTime"/>
+        <result column="USED_CNT" jdbcType="INTEGER" property="usedCnt"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="sql_base">
+    a.ID id, a.USER_NAME userName, a.USER_PWD userPwd, a.ADD_TIME addTime, a.USED_TIME usedTime, a.USED_CNT userCnt, a.STATUS status,
+    b.TYPE_NAME typeName
+  </sql>
+    <select id="selectAccountInfoByPageIndex" parameterType="com.xtzn.vo.DataRequest" resultType="java.util.Map">
+        select
+        <include refid="sql_base"/>
+        from account_info as a
+        left join account_type as b on a.type = b.id
+        <where>
+            <if test='typeId!=null and typeId!=""'>
+                and a.TYPE = #{typeId,jdbcType=INTEGER}
+            </if>
+            <if test='status!=null'>
+                and a.STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='usedCnt!=null and usedCnt!=""'>
+                and a.USED_CNT = #{usedCnt,jdbcType=INTEGER}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.ADD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.ADD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" parameterType="com.xtzn.vo.DataRequest" resultType="java.lang.Integer">
+        select count(*) from account_info as a
+        <where>
+            <if test='typeId!=null and typeId!=""'>
+                and a.TYPE = #{typeId,jdbcType=INTEGER}
+            </if>
+            <if test='status!=null'>
+                and a.STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='usedCnt!=null and usedCnt!=""'>
+                and a.USED_CNT = #{usedCnt,jdbcType=INTEGER}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.ADD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.ADD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectAllAccoutInfoByPageIndex" resultType="java.util.Map">
+        select
+        <include refid="sql_base"/>
+        from account_info as a
+        left join account_type as b on a.type = b.id
+        where limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectAccountInfoById" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select
+        <include refid="sql_base"/>
+        from account_info as a
+        left join account_type as b on a.type = b.id
+        where a.ID = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insertAccountInfo" parameterType="com.xtzn.mapper.entity.AccountInfo">
+    insert into account_info (ID, USER_NAME, USER_PWD, 
+      TYPE, 
+      USED_CNT, STATUS,USER_ID)
+    values (null, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER},
+      0, 0,#{userId,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertBatchAccountInfo" parameterType="java.util.List">
+        insert into account_info (USER_NAME, USER_PWD,
+        TYPE,
+        USED_CNT, STATUS,USER_ID)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.userName,jdbcType=VARCHAR}, #{item.userPwd,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER},
+            0, 0,#{item.userId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <delete id="deleteBatchByCondition">
+        delete from account_info
+        <where>
+            <if test='typeId !=null and typeId !=""'>
+                and TYPE = #{typeId,jdbcType=INTEGER}
+            </if>
+            <if test='status != null'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='usedCnt != null and usedCnt != ""'>
+                and USED_CNT = #{usedCnt,jdbcType=INTEGER}
+            </if>
+            <if test='startTime != null and startTime != ""'>
+                and TO_DAYS(ADD_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime != null and endTime != ""'>
+                and TO_DAYS(ADD_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId != null and userId != ""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </delete>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from account_info
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from account_info
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateAccountInfoContent" parameterType="com.xtzn.mapper.entity.AccountInfo">
+        update account_info
+        <set>
+            <if test='userName != null and userName != ""'>
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test='userPwd != null and userPwd != ""'>
+                USER_PWD = #{userPwd,jdbcType=VARCHAR},
+            </if>
+            <if test='type != null and type != ""'>
+                TYPE = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateAccountInfoStatus">
+    update account_info
+      set STATUS = #{status,jdbcType=TINYINT}
+     where ID = #{id,jdbcType=INTEGER}  
+  </update>
+    <select id="selectAccountInfoForLua" parameterType="com.xtzn.vo.LuaReuqest" resultType="java.util.Map">
+        select a.ID id, a.USER_NAME userName, a.USER_PWD userPwd,a.STATUS status
+        from account_info as a
+        left join account_type as b on a.TYPE = b.ID
+        <where>
+            <if test='status != null'>
+                and a.STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='typeName != null and typeName != ""'>
+                and b.TYPE_NAME = #{typeName,jdbcType=VARCHAR}
+            </if>
+            <if test='userName != null and userName != ""'>
+                and a.USER_NAME = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <insert id="insertAccountInfoByLua">
+    insert into account_info (ID, USER_NAME, USER_PWD, 
+      TYPE, USED_TIME, 
+      USED_CNT, STATUS,USER_ID)
+    values (null, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, 
+      (select ID from account_type where TYPE_NAME = #{typeName,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER}), null, 
+      0, 0,#{userId,jdbcType=INTEGER})
+  </insert>
+    <update id="updateAccountInfoByLua">
+        update account_info
+        <set>
+            <if test='status != null'>
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="id != null">
+                USED_CNT = USED_CNT + 1,
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

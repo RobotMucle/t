@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IRetainedRecordMapper">
+    <resultMap id="baseResultMap" type="com.xtzn.mapper.entity.RetainedRecord">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="UPLOAD_TIME" jdbcType="TIMESTAMP" property="uploadTime"/>
+        <result column="RETAINED_KEEP_DAYS" jdbcType="INTEGER" property="retainedKeepDays"/>
+        <result column="IS_SUCCESS" jdbcType="TINYINT" property="isSuccess"/>
+        <result column="REASON" jdbcType="VARCHAR" property="reason"/>
+        <result column="TASK_ID" jdbcType="INTEGER" property="taskId"/>
+        <result column="IP_ADDRESS" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="RETAINED_ID" jdbcType="INTEGER" property="retainedId"/>
+        <result column="RETAINED_CNT" jdbcType="INTEGER" property="retainedCnt"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID, PHONE_CODE, CREATE_TIME, UPLOAD_TIME, RETAINED_KEEP_DAYS, IS_SUCCESS, REASON, 
+    TASK_ID, IP_ADDRESS, RETAINED_ID, RETAINED_CNT, USER_ID
+  </sql>
+    <sql id="sql_days">
+    TO_DAYS(CURRENT_TIMESTAMP())-TO_DAYS(CREATE_TIME)
+  </sql>
+    <select id="selectYestodayDoRecordCount" resultType="java.lang.Integer">
+        select count(*) from retained_record where
+        <include refid="sql_days"/>
+        = 1 and IS_SUCCESS = 1 and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="selectTodayDoRecordCount" resultType="java.lang.Integer">
+        select count(*) from retained_record where
+        <include refid="sql_days"/>
+        = 0 and IS_SUCCESS = 1 and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="selectFailureCount" resultType="java.lang.Integer">
+        select count(distinct REASON) from retained_record where
+        <include refid="sql_days"/>
+        = 0 and IS_SUCCESS = 2 and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <insert id="insertRetainedReport">
+    insert into retained_record (ID, PHONE_CODE,
+      UPLOAD_TIME, RETAINED_KEEP_DAYS, IS_SUCCESS, 
+      REASON, TASK_ID, IP_ADDRESS, 
+      RETAINED_ID, RETAINED_CNT, USER_ID
+      )
+    values (null, #{phoneCode,jdbcType=VARCHAR},
+      #{uploadTime,jdbcType=TIMESTAMP}, #{retainedKeepDays,jdbcType=INTEGER}, #{isSuccess,jdbcType=TINYINT}, 
+      #{reason,jdbcType=VARCHAR}, #{taskId,jdbcType=INTEGER}, #{ipAddress,jdbcType=VARCHAR}, 
+      #{retainedId,jdbcType=INTEGER},1, #{userId,jdbcType=INTEGER}
+      )
+  </insert>
+    <update id="updateRetainedCnt">
+    update retained_record set RETAINED_CNT = RETAINED_CNT + 1
+    where RETAINED_ID = #{retainedId,jdbcType=INTEGER} and TO_DAYS(CURRENT_TIMESTAMP()) = TO_DAYS(CREATE_TIME)
+  </update>
+    <select id="selectRetainedRecordByCondition" parameterType="com.xtzn.vo.TaskRequest" resultType="java.util.Map">
+        select
+        T1.affiliateAccount,T1.configurationName,T1.country,T1.createTime,T1.finishNum,T1.retainedKeepDays,T1.retainedPercent,T1.uploadTime,T2.totalNum
+        from
+        (SELECT DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d') as uploadTime,DATE_FORMAT(a.CREATE_TIME,'%Y%m%d') as
+        createTime,a.TASK_ID as taskId,
+        a.RETAINED_KEEP_DAYS as retainedKeepDays,c.CONFIGURATION_NAME as configurationName,b.AFFILIATE_ACCOUNT as
+        affiliateAccount,b.COUNTRY country,b.RETAINED_PERCENT retainedPercent,COUNT(a.ID) finishNum from retained_record
+        as a
+        LEFT JOIN task_list as b on a.TASK_ID = b.ID
+        LEFT JOIN task_configuration as c on b.TASK_CONFIGURATION_ID = c.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            and a.IS_SUCCESS = 1
+        </where>
+        GROUP BY
+        uploadTime,createTime,taskId,retainedKeepDays,configurationName,AFFILIATE_ACCOUNT,COUNTRY,RETAINED_PERCENT)T1,
+        (SELECT COUNT(*) totalNum from retained_record as a
+        LEFT JOIN retained_list as b on a.TASK_ID = b.TASK_ID and a.UPLOAD_TIME = b.UPLOAD_TIME
+        LEFT JOIN task_list as c on a.TASK_ID = c.ID
+        LEFT JOIN task_configuration as d on c.TASK_CONFIGURATION_ID = d.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and c.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and d.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and c.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            and b.IS_SUCCESS = 1
+        </where>
+        group by DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d'),DATE_FORMAT(a.CREATE_TIME,'%Y%m%d'),a.TASK_ID)T2
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectRetainedRecordCountByCondition" parameterType="com.xtzn.vo.TaskRequest"
+            resultType="java.lang.Integer">
+        select count(*) from retained_record as a
+        LEFT JOIN task_list as b on a.TASK_ID = b.ID
+        LEFT JOIN task_configuration as c on b.TASK_CONFIGURATION_ID = c.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and b.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and b.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and b.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            and a.IS_SUCCESS = 1
+        </where>
+        GROUP BY DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d'),DATE_FORMAT(a.CREATE_TIME,'%Y%m%d'),a.TASK_ID,a.RETAINED_KEEP_DAYS,
+        c.CONFIGURATION_NAME,b.AFFILIATE_ACCOUNT,b.COUNTRY,b.RETAINED_PERCENT)T1,
+        (SELECT COUNT(*) totalNum from retained_record as a
+        LEFT JOIN retained_list as b on a.TASK_ID = b.TASK_ID and a.UPLOAD_TIME = b.UPLOAD_TIME
+        LEFT JOIN task_list as c on a.TASK_ID = c.ID
+        LEFT JOIN task_configuration as d on c.TASK_CONFIGURATION_ID = d.ID
+        <where>
+            <if test='affiliateAccount!=null and affiliateAccount!=""'>
+                and c.AFFILIATE_ACCOUNT = #{affiliateAccount,jdbcType=VARCHAR}
+            </if>
+            <if test='taskName!=null and taskName!=""'>
+                and d.TASK_NAME = #{taskName,jdbcType=VARCHAR}
+            </if>
+            <if test='country!=null and country!=""'>
+                and c.COUNTRY = #{country,jdbcType=VARCHAR}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(a.CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+            and b.IS_SUCCESS = 1
+        </where>
+        group by DATE_FORMAT(a.UPLOAD_TIME,'%Y%m%d'),DATE_FORMAT(a.CREATE_TIME,'%Y%m%d'),a.TASK_ID)T2
+    </select>
+</mapper>

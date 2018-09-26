@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.INoReturnAllianceMapper">
+
+    <sql id="sql_base">
+    ID id, AFFILIATE_ACCOUNT_NAME affiliateAccountName
+  </sql>
+
+    <select id="selectNoReturnAllianceByPage" resultType="com.xtzn.mapper.entity.NoReturnAlliance">
+        select
+        <include refid="sql_base"/>
+        from no_return_alliance where USER_ID = #{userId,jdbcType=INTEGER} limit
+        #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*)  from no_return_alliance where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectNoReturnAllianceName" resultType="java.lang.String">
+    select AFFILIATE_ACCOUNT_NAME affiliateAccountName from no_return_alliance where AFFILIATE_ACCOUNT_NAME = #{affiliateAccountName,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from no_return_alliance
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insertNoReturnAlliance">
+        insert into no_return_alliance (ID,AFFILIATE_ACCOUNT_NAME,USER_ID) values
+        <foreach collection="list" index="index" item="item"
+                 separator=",">
+            (null,#{item,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+</mapper>

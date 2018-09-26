@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.ICountryMapper">
+    <resultMap type="com.xtzn.mapper.entity.Country" id="countryResultMap">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID id, NAME name,STATUS status
+  </sql>
+    <select id="selectCountryByPageIndex" resultType="com.xtzn.mapper.entity.Country">
+        select
+        <include refid="sql_base"/>
+        from country order by ID DESC limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from country
+  </select>
+    <select id="selectUsingCountry" resultType="com.xtzn.mapper.entity.Country">
+        select
+        <include refid="sql_base"/>
+        from country where STATUS = 1
+    </select>
+    <select id="selectCountryById" resultType="com.xtzn.mapper.entity.Country">
+        select
+        <include refid="sql_base"/>
+        from country
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insertCountry">
+    insert into country (ID, NAME,STATUS)
+    values (null, #{name,jdbcType=VARCHAR},1)
+  </insert>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from country
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from country
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateCountryStatus">
+    update country set STATUS = #{status,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateCountryContent">
+    update country set NAME = #{name,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

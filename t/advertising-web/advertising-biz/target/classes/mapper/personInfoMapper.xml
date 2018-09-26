@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IPersonInfoMapper">
+    <resultMap id="personInfoResultMap" type="com.xtzn.mapper.entity.PersonInfo">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="FIRST_NAME" jdbcType="VARCHAR" property="firstName"/>
+        <result column="LAST_NAME" jdbcType="VARCHAR" property="lastName"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="YEAR" jdbcType="INTEGER" property="year"/>
+        <result column="MONTH" jdbcType="INTEGER" property="month"/>
+        <result column="DAY" jdbcType="INTEGER" property="day"/>
+        <result column="REGION" jdbcType="VARCHAR" property="region"/>
+        <result column="CITY" jdbcType="VARCHAR" property="city"/>
+        <result column="STREET" jdbcType="VARCHAR" property="street"/>
+        <result column="SEX" jdbcType="VARCHAR" property="sex"/>
+        <result column="ZIP_CODE" jdbcType="VARCHAR" property="zipCode"/>
+        <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone"/>
+        <result column="USED_CNT" jdbcType="INTEGER" property="usedCnt"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="USED_TIME" jdbcType="TIMESTAMP" property="usedTime"/>
+        <result column="IS_SUCCESS" jdbcType="TINYINT" property="isSuccess"/>
+        <result column="SECURITY_CODE" jdbcType="VARCHAR" property="securityCode"/>
+        <result column="IP_ADDRESS" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="IP_REGION" jdbcType="VARCHAR" property="ipRegion"/>
+        <result column="IP_CITY" jdbcType="VARCHAR" property="ipCity"/>
+        <result column="ACCOUNT_BALANCE" jdbcType="DECIMAL" property="accountBalance"/>
+        <result column="FILE_NAME" jdbcType="VARCHAR" property="fileName"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="ACTIVE_LINK" jdbcType="VARCHAR" property="activeLink"/>
+        <result column="TYPE_ID" jdbcType="INTEGER" property="typeId"/>
+    </resultMap>
+    <sql id="sql_map">
+    a.ID id, a.FIRST_NAME firstName, a.LAST_NAME lastName, a.EMAIL email, a.PASSWORD password, 
+    a.YEAR year, a.MONTH month, a.DAY day, a.REGION region, a.CITY city, a.STREET street, 
+    a.SEX, a.ZIP_CODE zipCode, a.TELEPHONE telephone, a.USED_CNT usetCnt, a.CREATE_TIME createTime, 
+    a.USED_TIME usedTime, a.IS_SUCCESS isSuccess, a.SECURITY_CODE securityCode, 
+    a.IP_ADDRESS ipAddress, a.IP_REGION ipRegion, a.IP_CITY ipCity, a.ACCOUNT_BALANCE accountBalance, 
+    a.FILE_NAME fileName, a.STATUS status, a.ACTIVE_LINK activeLink,b.TYPE_NAME typeName
+  </sql>
+    <sql id="sql_base">
+    ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, YEAR, MONTH, DAY, REGION, CITY, STREET, 
+    SEX, ZIP_CODE, TELEPHONE, USED_CNT, CREATE_TIME, USED_TIME, IS_SUCCESS, SECURITY_CODE, 
+    IP_ADDRESS, IP_REGION, IP_CITY, ACCOUNT_BALANCE, FILE_NAME, STATUS, ACTIVE_LINK, 
+    TYPE_ID
+  </sql>
+    <select id="selectPersonInfoByPageIndex" parameterType="com.xtzn.vo.DataRequest" resultType="java.util.Map">
+        select
+        <include refid="sql_map"/>
+        from person_info as a
+        left join person_type as b on a.TYPE_ID = b.ID
+        <where>
+            <if test='typeId!=null and typeId!=""'>
+                and a.TYPE_ID = #{typeId,jdbcType=INTEGER}
+            </if>
+            <if test='status!=null'>
+                and a.STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='fileName!=null and fileName !=""'>
+                and a.FILE_NAME = #{fileName,jdbcType=VARCHAR}
+            </if>
+            <if test='isSuccess!=null'>
+                and a.IS_SUCCESS = #{isSuccess,jdbcType=TINYINT}
+            </if>
+            <if test='startTime!=null and startTime !=""'>
+                and TO_DAYS(a.CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime !=""'>
+                and TO_DAYS(a.CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId !=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectPersonInfoByLua" resultMap="personInfoResultMap" parameterType="com.xtzn.vo.LuaReuqest">
+        select
+        <include refid="sql_map"/>
+        from person_info as a
+        left join person_type as b on a.TYPE_ID = b.ID
+        <where>
+            <if test="typeName != null and typeName != ''">
+                and b.TYPE_NAME = #{typeName,jdbcType=VARCHAR}
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and a.USER_ID = #{userId,jdbcType=INTEGER} and a.STATUS = 0
+            </if>
+        </where>
+    </select>
+    <select id="selectPersonInfoByFileName" resultMap="personInfoResultMap">
+        select
+        <include refid="sql_base"/>
+        from person_info where FILE_NAME = #{fileName,jdbcType=VARCHAR} and USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="com.xtzn.vo.DataRequest">
+        select count(*) from person_info
+        <where>
+            <if test='typeId!=null and typeId!=""'>
+                and TYPE_ID = #{typeId,jdbcType=INTEGER}
+            </if>
+            <if test='status!=null'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='fileName!=null and fileName!=""'>
+                and FILE_NAME = #{fileName,jdbcType=VARCHAR}
+            </if>
+            <if test='isSuccess!=null and isSuccess!=""'>
+                and IS_SUCCESS = #{isSuccess,jdbcType=TINYINT}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectPersonInfoById" parameterType="java.lang.Integer" resultMap="personInfoResultMap">
+        select
+        <include refid="sql_base"/>
+        from person_info where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from person_info
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from person_info
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <delete id="deleteBatchByCondition" parameterType="com.xtzn.vo.DataRequest">
+        delete from person_info
+        <where>
+            <if test='typeId!=null and typeId!=""'>
+                and TYPE_ID = #{typeId,jdbcType=INTEGER}
+            </if>
+            <if test='status!=null'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='fileName!=null and fileName!=""'>
+                and FILE_NAME = #{fileName,jdbcType=VARCHAR}
+            </if>
+            <if test='isSuccess!=null and isSuccess!=""'>
+                and IS_SUCCESS = #{isSuccess,jdbcType=TINYINT}
+            </if>
+            <if test='startTime!=null and startTime!=""'>
+                and TO_DAYS(CREATE_TIME) &gt;= TO_DAYS(#{startTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='endTime!=null and endTime!=""'>
+                and TO_DAYS(CREATE_TIME) &lt;= TO_DAYS(#{endTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </delete>
+    <insert id="insertPersonInfo" parameterType="com.xtzn.mapper.entity.PersonInfo">
+    insert into person_info (ID, FIRST_NAME, LAST_NAME, 
+      EMAIL, PASSWORD, YEAR, 
+      MONTH, DAY, REGION, 
+      CITY, STREET, SEX, 
+      ZIP_CODE, TELEPHONE, USED_CNT, 
+      CREATE_TIME, IS_SUCCESS, 
+      SECURITY_CODE, IP_ADDRESS, IP_REGION, 
+      IP_CITY, ACCOUNT_BALANCE, FILE_NAME, 
+      STATUS, ACTIVE_LINK, TYPE_ID, USER_ID
+      )
+    values (#{id,jdbcType=INTEGER}, #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{year,jdbcType=INTEGER}, 
+      #{month,jdbcType=INTEGER}, #{day,jdbcType=INTEGER}, #{region,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{zipCode,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 0, 
+      null, 0, 
+      #{securityCode,jdbcType=VARCHAR}, #{ipAddress,jdbcType=VARCHAR}, #{ipRegion,jdbcType=VARCHAR}, 
+      #{ipCity,jdbcType=VARCHAR}, #{accountBalance,jdbcType=DECIMAL}, #{fileName,jdbcType=VARCHAR}, 
+      0, #{activeLink,jdbcType=VARCHAR}, #{typeId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}
+      )
+  </insert>
+    <update id="updatePersonInfoContent" parameterType="com.xtzn.mapper.entity.PersonInfo">
+        update person_info
+        <set>
+            <if test="firstName != null and firstName != ''">
+                FIRST_NAME = #{firstName,jdbcType=VARCHAR},
+            </if>
+            <if test="lastName != null and lastName != ''">
+                LAST_NAME = #{lastName,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null and email != ''">
+                EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != ''">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null and year != ''">
+                YEAR = #{year,jdbcType=INTEGER},
+            </if>
+            <if test="month != null and month != ''">
+                MONTH = #{month,jdbcType=INTEGER},
+            </if>
+            <if test="day != null and day != ''">
+                DAY = #{day,jdbcType=INTEGER},
+            </if>
+            <if test="region != null and region != ''">
+                REGION = #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null and city != ''">
+                CITY = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="street != null and street != ''">
+                STREET = #{street,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null and sex != ''">
+                SEX = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="zipCode != null and zipCode != ''">
+                ZIP_CODE = #{zipCode,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                TELEPHONE = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="usedCnt != null and usedCnt != ''">
+                USED_CNT = USED_CNT + 1,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="usedTime != null and usedTime != ''">
+                USED_TIME = #{usedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isSuccess != null and isSuccess != ''">
+                IS_SUCCESS = #{isSuccess,jdbcType=TINYINT},
+            </if>
+            <if test="securityCode != null and securityCode != ''">
+                SECURITY_CODE = #{securityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="ipAddress != null and ipAddress != ''">
+                IP_ADDRESS = #{ipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="ipRegion != null and ipRegion != ''">
+                IP_REGION = #{ipRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="ipCity != null and ipCity != ''">
+                IP_CITY = #{ipCity,jdbcType=VARCHAR},
+            </if>
+            <if test="accountBalance != null and accountBalance != ''">
+                ACCOUNT_BALANCE = #{accountBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="fileName != null and fileName != ''">
+                FILE_NAME = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="activeLink != null and activeLink != ''">
+                ACTIVE_LINK = #{activeLink,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null and typeId != ''">
+                TYPE_ID = #{typeId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <insert id="insertBatchPersonInfo" parameterType="java.util.List">
+        insert into person_info (FIRST_NAME, LAST_NAME,
+        EMAIL, PASSWORD, YEAR,
+        MONTH, DAY, REGION,
+        CITY, STREET, SEX,
+        ZIP_CODE, TELEPHONE, USED_CNT,
+        IS_SUCCESS,
+        SECURITY_CODE,ACCOUNT_BALANCE,
+        STATUS,TYPE_ID, USER_ID
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.firstName,jdbcType=VARCHAR}, #{item.lastName,jdbcType=VARCHAR},
+            #{item.email,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER}, #{item.day,jdbcType=INTEGER}, #{item.region,jdbcType=VARCHAR},
+            #{item.city,jdbcType=VARCHAR}, #{item.street,jdbcType=VARCHAR}, #{item.sex,jdbcType=VARCHAR},
+            #{item.zipCode,jdbcType=VARCHAR}, #{item.telephone,jdbcType=VARCHAR}, 0,
+            0,
+            #{item.securityCode,jdbcType=VARCHAR},0.00,
+            0, #{item.typeId,jdbcType=INTEGER}, #{item.userId,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+</mapper>

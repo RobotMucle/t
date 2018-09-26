@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IAllianceMapper">
+    <resultMap id="allianceResultMap" type="com.xtzn.mapper.entity.Alliance">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="AFFILIATE_ACCOUNT_NAME" jdbcType="VARCHAR" property="affiliateAccountName"/>
+        <result column="AFFILIATE_ACCOUNT_LOGO" jdbcType="VARCHAR" property="affiliateAccountLogo"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID id, AFFILIATE_ACCOUNT_NAME affiliateAccountName, AFFILIATE_ACCOUNT_LOGO affiliateAccountLogo, STATUS status
+  </sql>
+    <sql id="sql_column">
+    a.ID id, a.AFFILIATE_ACCOUNT_NAME affiliateAccountName, a.AFFILIATE_ACCOUNT_LOGO affiliateAccountLogo, a.STATUS status,b.FRANCHISEE_NAME franchiseeName
+  </sql>
+    <select id="selectAllianceByPageIndex" resultMap="allianceResultMap">
+        select
+        <include refid="sql_base"/>
+        from alliance where USER_ID = #{userId,jdbcType=INTEGER} order by ID DESC limit
+        #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from alliance  where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAllCount" resultType="java.lang.Integer">
+    select count(*) from alliance 
+  </select>
+    <select id="selectAllAllianceByPageIndex" resultType="java.util.Map">
+        select
+        <include refid="sql_column"/>
+        from alliance as a
+        left join user as b on a.USER_ID = b.ID
+        order by franchiseeName DESC,ID DESC limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectUsingAllianceName" resultType="java.lang.String">
+    select AFFILIATE_ACCOUNT_NAME affiliateAccountName
+    from alliance where USER_ID = #{userId,jdbcType=INTEGER} and STATUS = 1 group by AFFILIATE_ACCOUNT_NAME
+  </select>
+    <select id="selectUsingAlliance" resultMap="allianceResultMap">
+        select
+        <include refid="sql_base"/>
+        from alliance where USER_ID = #{userId,jdbcType=INTEGER} and STATUS = 1
+    </select>
+    <select id="selectAllianceByName" resultMap="allianceResultMap">
+        select
+        <include refid="sql_base"/>
+        from alliance where USER_ID = #{userId,jdbcType=INTEGER} and AFFILIATE_ACCOUNT_NAME =
+        #{affiliateAccountName,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllianceById" resultMap="allianceResultMap">
+        select
+        <include refid="sql_base"/>
+        from alliance
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insertAlliance" parameterType="com.xtzn.mapper.entity.Alliance">
+    insert into alliance (ID, AFFILIATE_ACCOUNT_NAME, AFFILIATE_ACCOUNT_LOGO,STATUS,USER_ID)
+    values (null, #{affiliateAccountName,jdbcType=VARCHAR}, #{affiliateAccountLogo,jdbcType=VARCHAR},1,#{userId,jdbcType=INTEGER})
+  </insert>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from alliance
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from alliance
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <update id="updateAllianceStatus">
+    update alliance set STATUS = #{status,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateAllianceContent" parameterType="com.xtzn.mapper.entity.Alliance">
+    update alliance set AFFILIATE_ACCOUNT_NAME = #{affiliateAccountName,jdbcType=VARCHAR},AFFILIATE_ACCOUNT_LOGO = #{affiliateAccountLogo,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

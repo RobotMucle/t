@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.INoticeMapper">
+    <select id="selectLatestNotice" resultType="com.xtzn.mapper.entity.Notice">
+    select TITLE title, CONTENT content from notice order by id DESC limit 1
+  </select>
+    <insert id="insertNotice" parameterType="com.xtzn.mapper.entity.Notice">
+    insert into notice values(null,#{title,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR})
+  </insert>
+</mapper>

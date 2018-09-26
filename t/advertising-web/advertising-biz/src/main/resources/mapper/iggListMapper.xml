@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IIggListMapper">
+    <resultMap id="iggListResultMap" type="com.xtzn.mapper.entity.IggList">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="IGG_CODE" jdbcType="VARCHAR" property="iggCode"/>
+        <result column="PHONE_CODE" jdbcType="VARCHAR" property="phoneCode"/>
+        <result column="USED_TIME" jdbcType="TIMESTAMP" property="usedTime"/>
+        <result column="REASON" jdbcType="VARCHAR" property="reason"/>
+        <result column="STATUS" jdbcType="TINYINT" property="status"/>
+        <result column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="sql_base">
+    ID, IGG_CODE, PHONE_CODE, USED_TIME, REASON, STATUS
+  </sql>
+    <select id="selectIggListByPage" parameterType="com.xtzn.vo.DataRequest" resultMap="iggListResultMap">
+        select
+        <include refid="sql_base"/>
+        from igg_list
+        <where>
+            <if test='status!=null'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+        limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" parameterType="com.xtzn.vo.DataRequest" resultType="java.lang.Integer">
+        select count(*) from igg_list
+        <where>
+            <if test='status!=null'>
+                and STATUS = #{status,jdbcType=TINYINT}
+            </if>
+            <if test='userId!=null and userId!=""'>
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectUsingCount" resultType="java.lang.Integer">
+    select count(*) from igg_list  where USER_ID = #{userId,jdbcType=INTEGER} and STATUS = 0
+  </select>
+    <select id="selectIggListById" parameterType="java.lang.Integer" resultMap="iggListResultMap">
+        select
+        <include refid="sql_base"/>
+        from igg_list
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectIggByLua" resultType="com.xtzn.mapper.entity.IggList">
+    select ID id, IGG_CODE iggCode from igg_list
+    where STATUS = 0 and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from igg_list
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from igg_list
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insertBatchIggList">
+        insert into igg_list (IGG_CODE, STATUS, USER_ID) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item,jdbcType=VARCHAR},0,#{userId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <update id="updateIggListForOtherUse">
+        update igg_list set REASON = #{reason,jdbcType=VARCHAR},STATUS = 1
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <update id="updateIggList" parameterType="com.xtzn.mapper.entity.IggList">
+        update igg_list
+        <set>
+            <if test="iggCode != null and iggCode != ''">
+                IGG_CODE = #{iggCode,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneCode != null and phoneCode != ''">
+                PHONE_CODE = #{phoneCode,jdbcType=VARCHAR},
+            </if>
+            <if test="usedTime != null and usedTime != ''">
+                USED_TIME = #{usedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reason != null and reason != ''">
+                REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateIggResetByLua" parameterType="com.xtzn.mapper.entity.IggList">
+    update igg_list set PHONE_CODE = null,USED_TIME = null,REASON = null,STATUS = 0 where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

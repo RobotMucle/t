@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IPersonTypeMapper">
+
+    <select id="selectPersonTypeByPageIndex" resultType="com.xtzn.mapper.entity.PersonType">
+    select ID id,TYPE_NAME typeName from person_type where USER_ID = #{userId,jdbcType=INTEGER} limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+    <select id="selectPersonTypeById" resultType="com.xtzn.mapper.entity.PersonType">
+    select ID id, TYPE_NAME typeName from person_type where ID = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAllPersonType" resultType="com.xtzn.mapper.entity.PersonType">
+    select ID id, TYPE_NAME typeName from person_type where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from person_type  where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+    <insert id="insertPersonType" parameterType="com.xtzn.mapper.entity.PersonType">
+    insert into person_type values(null,#{typeName,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER})
+  </insert>
+    <update id="updatePersonTypeName" parameterType="com.xtzn.mapper.entity.PersonType">
+    update person_type set TYPE_NAME = #{typeName,jdbcType=VARCHAR} where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from person_type
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from person_type
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:reg="http://www.dangdang.com/schema/ddframe/reg"
+       xmlns:job="http://www.dangdang.com/schema/ddframe/job"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.dangdang.com/schema/ddframe/reg
+                        http://www.dangdang.com/schema/ddframe/reg/reg.xsd
+                        http://www.dangdang.com/schema/ddframe/job
+                        http://www.dangdang.com/schema/ddframe/job/job.xsd
+                        ">
+
+    <reg:zookeeper id="advertisingCoreBiz" server-lists="${elastic.address}" namespace="advertisingCoreBizElasticJob"
+                   base-sleep-time-milliseconds="1000" max-sleep-time-milliseconds="3000" max-retries="3"/>
+
+    <!--每日0点重置任务状态为1的时间线具体方案-->
+    <job:simple id="resetTask1" class="com.xtzn.core.task.ResetTask" registry-center-ref="advertisingCoreBiz"
+                cron="0 0 0 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+
+    <!--派发任务-->
+    <job:simple id="distributeTask1" class="com.xtzn.core.task.DistributeTask" registry-center-ref="advertisingCoreBiz"
+                cron="0 */1 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+
+    <!--每日0点留存处理-->
+    <job:simple id="resetRetained1" class="com.xtzn.core.task.RetainedTask" registry-center-ref="advertisingCoreBiz"
+                cron="0 0 0 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+
+    <job:simple id="distributeListenning1" class="com.xtzn.core.task.DistributeListenningTask"
+                registry-center-ref="advertisingCoreBiz"
+                cron="0 */30 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+
+    <job:simple id="retainedListenning1" class="com.xtzn.core.task.RetainedListenningTask"
+                registry-center-ref="advertisingCoreBiz"
+                cron="0 */30 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+
+    <job:simple id="resetLinkStateTask" class="com.xtzn.core.task.ResetLinkStateTask"
+                registry-center-ref="advertisingCoreBiz"
+                cron="0 */15 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+
+    <!--整点重置等待执行数-->
+    <job:simple id="resetWaitingForNumTask" class="com.xtzn.core.task.ResetWaitingForNumTask"
+                registry-center-ref="advertisingCoreBiz"
+                cron="0 0 0/1 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+    <!--更新待执行任务数-->
+    <job:simple id="timeQuantumTask" class="com.xtzn.core.task.timeQuantumTask"
+                registry-center-ref="advertisingCoreBiz"
+                cron="0 7 * * * ? " sharding-total-count="1" sharding-item-parameters="0=A" overwrite="true"/>
+</beans>

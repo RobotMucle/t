@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IIphoneModelMapper">
+    <resultMap type="com.xtzn.mapper.entity.IphoneModel" id="iphoneModelResultMap">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="MODEL" jdbcType="VARCHAR" property="model"/>
+        <result column="SYSTEM_VERSION" jdbcType="VARCHAR" property="systemVersion"/>
+    </resultMap>
+    <sql id="sql_base">
+     ID,MODEL,SYSTEM_VERSION
+  </sql>
+    <select id="selectIphoneModelByPage" resultMap="iphoneModelResultMap">
+        select
+        <include refid="sql_base"/>
+        from iphone_model order by ID DESC
+    </select>
+    <select id="selectAllIphoneModelByPage" resultMap="iphoneModelResultMap">
+        select
+        <include refid="sql_base"/>
+        from iphone_model order by ID DESC limit #{skips,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+    <select id="selectIphoneModelById" resultMap="iphoneModelResultMap">
+        select
+        <include refid="sql_base"/>
+        from iphone_model where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from iphone_model
+  </select>
+    <insert id="insertIphoneModel">
+    insert into  iphone_model values(null,#{model,jdbcType=VARCHAR},#{systemVersion,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateIphoneModel">
+    update iphone_model set MODEL = #{model,jdbcType=VARCHAR},SYSTEM_VERSION = #{systemVersion,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from iphone_model
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteBatchById" parameterType="java.util.List">
+        delete from iphone_model
+        where ID in
+        <foreach collection="list" index="index" item="id"
+                 separator="," open="(" close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+</mapper>
+  

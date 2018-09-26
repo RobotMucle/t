@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.mapper.IMachineMapper">
+    <select id="selectMachineByAndCondition" resultType="com.xtzn.mapper.entity.Machine">
+        select ID id, PHONE_CODE phoneCode,PHONE_UUID phoneUuid from machine
+        <where>
+            <if test="phoneCode != null">
+                and PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+            </if>
+            <if test="phoneUuid != null">
+                and PHONE_UUID = #{phoneUuid,jdbcType=VARCHAR}
+            </if>
+            <if test="id != null">
+                and ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="userId != null">
+                and USER_ID = #{userId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectMachineByOrCondition" resultType="com.xtzn.mapper.entity.Machine">
+   select PHONE_CODE phoneCode,PHONE_UUID phoneUuid from machine
+   where PHONE_CODE = #{phoneCode,jdbcType=VARCHAR} or PHONE_UUID = #{phoneUuid,jdbcType=VARCHAR}
+</select>
+    <insert id="insertMachine">
+   insert into machine values(null,#{phoneCode,jdbcType=VARCHAR},#{phoneUuid,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER})
+</insert>
+    <update id="updateMachine">
+        update machine
+        <set>
+            <if test="phoneCode != null">
+                PHONE_CODE = #{phoneCode,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneUuid != null">
+                PHONE_UUID = #{phoneUuid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

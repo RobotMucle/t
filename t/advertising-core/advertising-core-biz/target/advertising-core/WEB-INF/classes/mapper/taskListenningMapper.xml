@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.core.mapper.ITaskListenningMapper">
+
+
+    <insert id="insertTaskListenning">
+    insert into task_listenning(ID,TASK_ID,PHONE_CODE,LISTENNING_STATUS,RESULT_STATUS) values(null,#{taskId,jdbcType=INTEGER},#{phoneCode,jdbcType=VARCHAR},0,0)
+  </insert>
+    <sql id="sql_minute">
+    floor((unix_timestamp(CURRENT_TIMESTAMP())-unix_timestamp(DISTRIBUTE_TIME))/60)
+  </sql>
+    <select id="selectOverdueTask" resultType="java.util.Map">
+        select task_id taskId from task_listenning
+        where listenning_status = 0 and
+        <include refid="sql_minute"/> &gt; 29
+    </select>
+    <update id="updateOverdueTask">
+        update task_listenning set listenning_status = 1
+        where listenning_status = 0 and
+        <include refid="sql_minute"/> &gt; 29
+    </update>
+    <select id="selectTaskByPhoneCode" resultType="java.util.Map">
+    select TASK_ID taskId from task_listenning
+    where listenning_status = 0 and PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+  </select>
+    <update id="updateTaskByPhoneCode">
+    update task_listenning set listenning_status = 1
+    where listenning_status = 0 and PHONE_CODE = #{phoneCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

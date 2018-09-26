@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtzn.click.mapper.ISubMapper">
+    <resultMap id="BaseResultMap" type="com.xtzn.click.mapper.entity.Sub">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="SUB_ID" jdbcType="VARCHAR" property="subId"/>
+    </resultMap>
+    <insert id="insertSub" parameterType="java.lang.String">
+    insert into sub values(null,#{subId,jdbcType=VARCHAR})
+  </insert>
+    <select id="selectSubId" parameterType="java.lang.String" resultType="java.lang.String">
+    select sub_id from sub where sub_id = #{subId,jdbcType=VARCHAR}
+  </select>
+</mapper>
